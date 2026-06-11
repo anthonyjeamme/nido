@@ -56,6 +56,12 @@ async function postForm(pageUrl, marqueur, champs, posteUrl = pageUrl) {
 
   const fd = new FormData();
   fd.set(actionId, "");
+  // Reprend les champs cachés du formulaire (comme un navigateur).
+  for (const input of form.match(/<input[^>]*type="hidden"[^>]*>/g) ?? []) {
+    const nom = input.match(/name="([^"]+)"/)?.[1];
+    const valeur = input.match(/value="([^"]*)"/)?.[1] ?? "";
+    if (nom && !nom.startsWith("$ACTION")) fd.set(nom, valeur);
+  }
   for (const [k, v] of Object.entries(champs)) fd.set(k, v);
 
   const r = await fetch(posteUrl, {
@@ -221,6 +227,55 @@ const envoi2 = await postForm(
 verifie("envoi du récap", envoi2.status === 303);
 const final = await texte(await GET(`${BASE}/`));
 verifie("Ma journée : récap envoyé", final.includes("Récap du soir envoyé"));
+
+// ---------------------------------------------------------------------------
+// 10. Paie : génération du bulletin du mois courant
+const moisCourant = dateJour.slice(0, 7);
+const pagePaie = await texte(await GET(`${BASE}/paie`));
+verifie("page Paie : contrat listé", pagePaie.includes("Léa"));
+
+const generationBulletin = await postForm(`${BASE}/paie`, `value="${moisCourant}"`, {
+  contract_id: contractId,
+  mois: moisCourant,
+});
+verifie(
+  "génération du bulletin",
+  generationBulletin.location === `/paie/${contractId}/${moisCourant}`,
+);
+
+const pageBulletin = await texte(
+  await GET(`${BASE}/paie/${contractId}/${moisCourant}`),
+);
+// Mensualisation : 4,20 × 36 × 44 ÷ 12 = 554,40 €
+verifie("bulletin : mensualisation 554,40 €", pageBulletin.includes("554,40"));
+verifie("bulletin : ligne expliquée (formule)", pageBulletin.includes("semaines_programmées"));
+verifie("déclaration : heures normales 132", pageBulletin.includes(">132<"));
+verifie("déclaration : jours d'activité 15", pageBulletin.includes(">15<"));
+
+// 11. Validation puis marquage « déclaré »
+const validation = await postForm(
+  `${BASE}/paie/${contractId}/${moisCourant}`,
+  'name="payslip_id"',
+  {},
+  `${BASE}/paie/${contractId}/${moisCourant}`,
+);
+verifie("validation du bulletin", validation.status === 303);
+
+const apresValidation = await texte(
+  await GET(`${BASE}/paie/${contractId}/${moisCourant}`),
+);
+verifie("bulletin validé", apresValidation.includes("validé"));
+
+const declaration = await postForm(
+  `${BASE}/paie/${contractId}/${moisCourant}`,
+  'name="declaration_id"',
+  {},
+);
+verifie("marquage déclaré", declaration.status === 303);
+const apresDeclaration = await texte(
+  await GET(`${BASE}/paie/${contractId}/${moisCourant}`),
+);
+verifie("statut Déclaré ✓", apresDeclaration.includes("Déclaré ✓"));
 
 console.log(echecs === 0 ? "\n✅ Smoke test OK" : `\n❌ ${echecs} échec(s)`);
 process.exit(echecs === 0 ? 0 : 1);

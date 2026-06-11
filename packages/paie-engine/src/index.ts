@@ -28,5 +28,11 @@ export {
   remunerationCongesAnneeIncomplete,
 } from "./conges";
 export { ENGINE_VERSION, genereBulletin } from "./bulletin";
+export {
+  agregePointages,
+  lundiDeLaSemaine,
+  type AgregatPointages,
+  type PointageBrut,
+} from "./pointages";
 export { valideContratPaie, type ProblemeContrat } from "./validation";
 export { calculeMajorationFerieTravaille } from "./feries";

@@ -9,6 +9,62 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      absences: {
+        Row: {
+          certificat_path: string | null
+          contract_id: string
+          created_at: string
+          date_debut: string
+          date_fin: string
+          deleted_at: string | null
+          heures: number
+          id: string
+          jours: number
+          note: string | null
+          qualification_confirmee: boolean
+          type: Database["public"]["Enums"]["absence_type"]
+          updated_at: string
+        }
+        Insert: {
+          certificat_path?: string | null
+          contract_id: string
+          created_at?: string
+          date_debut: string
+          date_fin: string
+          deleted_at?: string | null
+          heures?: number
+          id?: string
+          jours?: number
+          note?: string | null
+          qualification_confirmee?: boolean
+          type: Database["public"]["Enums"]["absence_type"]
+          updated_at?: string
+        }
+        Update: {
+          certificat_path?: string | null
+          contract_id?: string
+          created_at?: string
+          date_debut?: string
+          date_fin?: string
+          deleted_at?: string | null
+          heures?: number
+          id?: string
+          jours?: number
+          note?: string | null
+          qualification_confirmee?: boolean
+          type?: Database["public"]["Enums"]["absence_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "absences_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assmats: {
         Row: {
           adresse: Json
@@ -117,6 +173,47 @@ export type Database = {
           {
             foreignKeyName: "attendance_events_pointe_par_fkey"
             columns: ["pointe_par"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_log: {
+        Row: {
+          acteur: string | null
+          action: string
+          apres: Json | null
+          avant: Json | null
+          horodatage: string
+          id: string
+          record_id: string | null
+          table_name: string
+        }
+        Insert: {
+          acteur?: string | null
+          action: string
+          apres?: Json | null
+          avant?: Json | null
+          horodatage?: string
+          id?: string
+          record_id?: string | null
+          table_name: string
+        }
+        Update: {
+          acteur?: string | null
+          action?: string
+          apres?: Json | null
+          avant?: Json | null
+          horodatage?: string
+          id?: string
+          record_id?: string | null
+          table_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_log_acteur_fkey"
+            columns: ["acteur"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -559,6 +656,219 @@ export type Database = {
           },
         ]
       }
+      leave_balances: {
+        Row: {
+          contract_id: string
+          created_at: string
+          id: string
+          jours_acquis: number
+          jours_pris: number
+          periode_ref_debut: string
+          updated_at: string
+        }
+        Insert: {
+          contract_id: string
+          created_at?: string
+          id?: string
+          jours_acquis?: number
+          jours_pris?: number
+          periode_ref_debut: string
+          updated_at?: string
+        }
+        Update: {
+          contract_id?: string
+          created_at?: string
+          id?: string
+          jours_acquis?: number
+          jours_pris?: number
+          periode_ref_debut?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leave_balances_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pajemploi_declarations: {
+        Row: {
+          child_id: string
+          created_at: string
+          heures_complementaires: number
+          heures_majorees: number
+          heures_normales: number
+          id: string
+          indemnites_entretien: number
+          jours_activite: number
+          jours_cp: number
+          mois: string
+          payslip_id: string
+          salaire_net_total: number
+          statut: Database["public"]["Enums"]["declaration_status"]
+          updated_at: string
+        }
+        Insert: {
+          child_id: string
+          created_at?: string
+          heures_complementaires?: number
+          heures_majorees?: number
+          heures_normales: number
+          id?: string
+          indemnites_entretien?: number
+          jours_activite: number
+          jours_cp?: number
+          mois: string
+          payslip_id: string
+          salaire_net_total: number
+          statut?: Database["public"]["Enums"]["declaration_status"]
+          updated_at?: string
+        }
+        Update: {
+          child_id?: string
+          created_at?: string
+          heures_complementaires?: number
+          heures_majorees?: number
+          heures_normales?: number
+          id?: string
+          indemnites_entretien?: number
+          jours_activite?: number
+          jours_cp?: number
+          mois?: string
+          payslip_id?: string
+          salaire_net_total?: number
+          statut?: Database["public"]["Enums"]["declaration_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pajemploi_declarations_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pajemploi_declarations_payslip_id_fkey"
+            columns: ["payslip_id"]
+            isOneToOne: false
+            referencedRelation: "payslips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payslip_lines: {
+        Row: {
+          code: string
+          created_at: string
+          formule: string
+          id: string
+          inputs: Json
+          label: string
+          montant: number
+          ordre: number
+          payslip_id: string
+          ref_code: string | null
+          ref_source: string | null
+          ref_url: string | null
+          section: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          formule: string
+          id?: string
+          inputs?: Json
+          label: string
+          montant: number
+          ordre?: number
+          payslip_id: string
+          ref_code?: string | null
+          ref_source?: string | null
+          ref_url?: string | null
+          section?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          formule?: string
+          id?: string
+          inputs?: Json
+          label?: string
+          montant?: number
+          ordre?: number
+          payslip_id?: string
+          ref_code?: string | null
+          ref_source?: string | null
+          ref_url?: string | null
+          section?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payslip_lines_payslip_id_fkey"
+            columns: ["payslip_id"]
+            isOneToOne: false
+            referencedRelation: "payslips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payslips: {
+        Row: {
+          anomalies: Json
+          contract_id: string
+          created_at: string
+          engine_version: string
+          id: string
+          mois: string
+          net_total: number
+          rule_set_version: string | null
+          statut: Database["public"]["Enums"]["payslip_status"]
+          total_du: number
+          total_indemnites: number
+          updated_at: string
+        }
+        Insert: {
+          anomalies?: Json
+          contract_id: string
+          created_at?: string
+          engine_version: string
+          id?: string
+          mois: string
+          net_total: number
+          rule_set_version?: string | null
+          statut?: Database["public"]["Enums"]["payslip_status"]
+          total_du: number
+          total_indemnites?: number
+          updated_at?: string
+        }
+        Update: {
+          anomalies?: Json
+          contract_id?: string
+          created_at?: string
+          engine_version?: string
+          id?: string
+          mois?: string
+          net_total?: number
+          rule_set_version?: string | null
+          statut?: Database["public"]["Enums"]["payslip_status"]
+          total_du?: number
+          total_indemnites?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payslips_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       planned_schedules: {
         Row: {
           contract_id: string
@@ -722,10 +1032,32 @@ export type Database = {
     }
     Functions: {
       current_assmat_id: { Args: never; Returns: string }
+      enregistre_bulletin: {
+        Args: {
+          p_anomalies: Json
+          p_contract_id: string
+          p_declaration: Json
+          p_engine_version: string
+          p_lignes: Json
+          p_mois: string
+          p_net_total: number
+          p_total_du: number
+          p_total_indemnites: number
+        }
+        Returns: string
+      }
       is_guardian_of: { Args: { p_child_id: string }; Returns: boolean }
       uuid_v7: { Args: never; Returns: string }
+      valide_bulletin: { Args: { p_payslip_id: string }; Returns: undefined }
     }
     Enums: {
+      absence_type:
+        | "enfant_convenance"
+        | "enfant_maladie_certificat"
+        | "assmat_maladie"
+        | "cp"
+        | "sans_solde"
+        | "ferie"
       attendance_type: "in" | "out"
       authorization_type:
         | "sortie"
@@ -736,6 +1068,7 @@ export type Database = {
       contract_status: "brouillon" | "actif" | "termine"
       contract_type: "annee_complete" | "annee_incomplete"
       cp_versement_option: "juin" | "prise_principale" | "au_fil"
+      declaration_status: "a_declarer" | "declare"
       log_entry_type:
         | "repas"
         | "sieste"
@@ -744,6 +1077,7 @@ export type Database = {
         | "humeur"
         | "note"
         | "arrivee_info"
+      payslip_status: "brouillon" | "valide"
       profile_role: "assmat" | "parent"
       schedule_exception_type:
         | "absence_programmee"
@@ -877,6 +1211,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      absence_type: [
+        "enfant_convenance",
+        "enfant_maladie_certificat",
+        "assmat_maladie",
+        "cp",
+        "sans_solde",
+        "ferie",
+      ],
       attendance_type: ["in", "out"],
       authorization_type: [
         "sortie",
@@ -888,6 +1230,7 @@ export const Constants = {
       contract_status: ["brouillon", "actif", "termine"],
       contract_type: ["annee_complete", "annee_incomplete"],
       cp_versement_option: ["juin", "prise_principale", "au_fil"],
+      declaration_status: ["a_declarer", "declare"],
       log_entry_type: [
         "repas",
         "sieste",
@@ -897,6 +1240,7 @@ export const Constants = {
         "note",
         "arrivee_info",
       ],
+      payslip_status: ["brouillon", "valide"],
       profile_role: ["assmat", "parent"],
       schedule_exception_type: [
         "absence_programmee",

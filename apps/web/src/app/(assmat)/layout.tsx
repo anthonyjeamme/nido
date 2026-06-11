@@ -7,6 +7,7 @@ const ONGLETS = [
   { href: "/", label: "Ma journée", icone: "🏠" },
   { href: "/enfants", label: "Enfants", icone: "🧒" },
   { href: "/contrats", label: "Contrats", icone: "📋" },
+  { href: "/paie", label: "Paie", icone: "💶" },
 ];
 
 export default async function AssmatLayout({
