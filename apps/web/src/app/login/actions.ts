@@ -11,6 +11,19 @@ export async function envoyerLienMagique(formData: FormData) {
     redirect("/login?erreur=email_invalide");
   }
 
+  // Destination après connexion (ex. lien d'invitation parent) : conservée
+  // en cookie car le lien e-mail ne transporte pas de paramètres custom.
+  const next = String(formData.get("next") ?? "");
+  if (next.startsWith("/")) {
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies();
+    cookieStore.set("nido_next", next, {
+      httpOnly: true,
+      maxAge: 60 * 60,
+      path: "/",
+    });
+  }
+
   const headersList = await headers();
   const origin = headersList.get("origin") ?? "http://localhost:3000";
 

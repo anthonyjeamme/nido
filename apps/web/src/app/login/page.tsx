@@ -12,7 +12,7 @@ const MESSAGES_ERREUR: Record<string, string> = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ envoye?: string; erreur?: string }>;
+  searchParams: Promise<{ envoye?: string; erreur?: string; next?: string }>;
 }) {
   const supabase = await createClient();
   const {
@@ -22,7 +22,7 @@ export default async function LoginPage({
     redirect("/");
   }
 
-  const { envoye, erreur } = await searchParams;
+  const { envoye, erreur, next } = await searchParams;
   const messageErreur = erreur ? MESSAGES_ERREUR[erreur] : undefined;
 
   return (
@@ -49,6 +49,7 @@ export default async function LoginPage({
           action={envoyerLienMagique}
           className="flex w-full max-w-sm flex-col gap-4"
         >
+          {next && <input type="hidden" name="next" value={next} />}
           <label className="flex flex-col gap-1.5">
             <span className="text-sm font-medium">Votre adresse e-mail</span>
             <input

@@ -321,6 +321,8 @@ export type Database = {
           email: string | null
           est_employeur: boolean
           id: string
+          invitation_acceptee_le: string | null
+          invitation_token: string | null
           nom: string
           personnes_autorisees: Json
           prenom: string
@@ -335,6 +337,8 @@ export type Database = {
           email?: string | null
           est_employeur?: boolean
           id?: string
+          invitation_acceptee_le?: string | null
+          invitation_token?: string | null
           nom: string
           personnes_autorisees?: Json
           prenom: string
@@ -349,6 +353,8 @@ export type Database = {
           email?: string | null
           est_employeur?: boolean
           id?: string
+          invitation_acceptee_le?: string | null
+          invitation_token?: string | null
           nom?: string
           personnes_autorisees?: Json
           prenom?: string
@@ -694,6 +700,60 @@ export type Database = {
           },
         ]
       }
+      messages: {
+        Row: {
+          auteur: string
+          contenu: string
+          created_at: string
+          id: string
+          lu_le: string | null
+          payload: Json
+          piece_jointe_path: string | null
+          thread_id: string
+          traite_le: string | null
+          type: Database["public"]["Enums"]["message_type"]
+        }
+        Insert: {
+          auteur: string
+          contenu: string
+          created_at?: string
+          id?: string
+          lu_le?: string | null
+          payload?: Json
+          piece_jointe_path?: string | null
+          thread_id: string
+          traite_le?: string | null
+          type?: Database["public"]["Enums"]["message_type"]
+        }
+        Update: {
+          auteur?: string
+          contenu?: string
+          created_at?: string
+          id?: string
+          lu_le?: string | null
+          payload?: Json
+          piece_jointe_path?: string | null
+          thread_id?: string
+          traite_le?: string | null
+          type?: Database["public"]["Enums"]["message_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_auteur_fkey"
+            columns: ["auteur"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pajemploi_declarations: {
         Row: {
           child_id: string
@@ -1026,6 +1086,42 @@ export type Database = {
           },
         ]
       }
+      threads: {
+        Row: {
+          assmat_id: string
+          child_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          assmat_id: string
+          child_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          assmat_id?: string
+          child_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "threads_assmat_id_fkey"
+            columns: ["assmat_id"]
+            isOneToOne: false
+            referencedRelation: "assmats"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "threads_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: true
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -1047,6 +1143,8 @@ export type Database = {
         Returns: string
       }
       is_guardian_of: { Args: { p_child_id: string }; Returns: boolean }
+      plage_dispo_assmat: { Args: { p_child_id: string }; Returns: Json }
+      reclame_invitation: { Args: { p_token: string }; Returns: string }
       uuid_v7: { Args: never; Returns: string }
       valide_bulletin: { Args: { p_payslip_id: string }; Returns: undefined }
     }
@@ -1077,6 +1175,7 @@ export type Database = {
         | "humeur"
         | "note"
         | "arrivee_info"
+      message_type: "libre" | "absence" | "retard" | "rdv" | "reappro"
       payslip_status: "brouillon" | "valide"
       profile_role: "assmat" | "parent"
       schedule_exception_type:
@@ -1240,6 +1339,7 @@ export const Constants = {
         "note",
         "arrivee_info",
       ],
+      message_type: ["libre", "absence", "retard", "rdv", "reappro"],
       payslip_status: ["brouillon", "valide"],
       profile_role: ["assmat", "parent"],
       schedule_exception_type: [

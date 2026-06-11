@@ -4,14 +4,12 @@ import { createClient } from "@/lib/supabase/server";
 import { seDeconnecter } from "../actions";
 
 const ONGLETS = [
-  { href: "/", label: "Ma journée", icone: "🏠" },
-  { href: "/enfants", label: "Enfants", icone: "🧒" },
-  { href: "/contrats", label: "Contrats", icone: "📋" },
-  { href: "/paie", label: "Paie", icone: "💶" },
-  { href: "/messages", label: "Messages", icone: "💬" },
+  { href: "/parent", label: "Mon enfant", icone: "🧒" },
+  { href: "/parent/bulletins", label: "Bulletins", icone: "💶" },
+  { href: "/parent/messages", label: "Messages", icone: "💬" },
 ];
 
-export default async function AssmatLayout({
+export default async function ParentLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const supabase = await createClient();
@@ -27,14 +25,14 @@ export default async function AssmatLayout({
     .select("role")
     .eq("id", user.id)
     .single();
-  if (profile?.role === "parent") {
-    redirect("/parent");
+  if (profile?.role !== "parent") {
+    redirect("/");
   }
 
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-zinc-200 bg-white/90 px-4 py-3 backdrop-blur">
-        <Link href="/" className="text-xl font-bold tracking-tight">
+        <Link href="/parent" className="text-xl font-bold tracking-tight">
           Nido
         </Link>
         <form action={seDeconnecter}>

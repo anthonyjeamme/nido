@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
+import { BoutonCopier } from "@/components/bouton-copier";
 import { createClient } from "@/lib/supabase/server";
 import { ajouterTuteur, basculerAutorisation, majSante } from "../actions";
 
@@ -24,6 +26,10 @@ export default async function FicheEnfantPage({
 }) {
   const { id } = await params;
   const supabase = await createClient();
+  const headersList = await headers();
+  const origin =
+    headersList.get("origin") ??
+    `http://${headersList.get("host") ?? "localhost:3000"}`;
 
   const { data: enfant } = await supabase
     .from("children")
@@ -38,7 +44,9 @@ export default async function FicheEnfantPage({
     await Promise.all([
       supabase
         .from("child_guardians")
-        .select("id, prenom, nom, email, telephone, est_employeur, profile_id")
+        .select(
+          "id, prenom, nom, email, telephone, est_employeur, profile_id, invitation_token",
+        )
         .eq("child_id", id)
         .is("deleted_at", null),
       supabase
@@ -211,10 +219,20 @@ export default async function FicheEnfantPage({
               <p className="text-sm text-zinc-500">
                 {[t.email, t.telephone].filter(Boolean).join(" · ") || "—"}
               </p>
-              {!t.profile_id && (
-                <p className="mt-1 text-xs text-zinc-400">
-                  Pas encore de compte parent (invitation à la prochaine étape)
+              {t.profile_id ? (
+                <p className="mt-1 text-xs text-emerald-700">
+                  ✓ Compte parent activé
                 </p>
+              ) : (
+                <div className="mt-2 flex items-center justify-between gap-2 rounded-xl bg-blue-50 p-2.5">
+                  <span className="text-xs text-blue-900">
+                    Invitez {t.prenom} : envoyez-lui ce lien, son compte
+                    s&apos;activera en 2 minutes.
+                  </span>
+                  <BoutonCopier
+                    valeur={`${origin}/invitation/${t.invitation_token}`}
+                  />
+                </div>
               )}
             </li>
           ))}

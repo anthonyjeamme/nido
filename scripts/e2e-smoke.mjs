@@ -277,5 +277,90 @@ const apresDeclaration = await texte(
 );
 verifie("statut Déclaré ✓", apresDeclaration.includes("Déclaré ✓"));
 
+// ---------------------------------------------------------------------------
+// 12. Espace parent : invitation, timeline, pointage parent, messagerie
+const ficheAvecInvitation = await texte(await GET(`${BASE}/enfants/${childId}`));
+const tokenInvitation = ficheAvecInvitation.match(/\/invitation\/([0-9a-f-]+)/)?.[1];
+verifie("lien d'invitation affiché sur la fiche", Boolean(tokenInvitation));
+
+// L'assmat ouvre sa messagerie (crée le fil de discussion)
+await GET(`${BASE}/messages`);
+
+// --- Session parent (jar séparé)
+const jarAssmat = new Map(jar);
+jar.clear();
+
+const emailParent = `parent.${Date.now()}@nido.fr`;
+await postForm(`${BASE}/login?next=/invitation/${tokenInvitation}`, 'name="email"', {
+  email: emailParent,
+  next: `/invitation/${tokenInvitation}`,
+});
+await new Promise((r) => setTimeout(r, 2000));
+const messagesParent = await (await fetch(`${MAILPIT}/api/v1/messages`)).json();
+const mailParent = await (
+  await fetch(`${MAILPIT}/api/v1/message/${messagesParent.messages[0].ID}`)
+).json();
+const lienParent = mailParent.HTML.match(/href="([^"]*token_hash[^"]*)"/)[1]
+  .replaceAll("&amp;", "&")
+  .replace("localhost:3000", new URL(BASE).host);
+const confirmParent = await GET(lienParent);
+const versInvitation = confirmParent.headers.get("location") ?? "";
+verifie(
+  "connexion parent redirige vers l'invitation",
+  versInvitation.startsWith("/invitation/"),
+);
+const pageInvitation = await GET(`${BASE}${versInvitation}`);
+verifie(
+  "invitation acceptée → espace parent",
+  pageInvitation.headers.get("location") === "/parent",
+);
+
+const espaceParent = await texte(await GET(`${BASE}/parent`));
+verifie("espace parent : Léa visible", espaceParent.includes("Léa"));
+verifie(
+  "pointage parent proposé (contrat l'autorise)",
+  espaceParent.includes("Je dépose mon enfant"),
+);
+
+// Pointage par le parent
+const pointageParent = await postForm(`${BASE}/parent`, 'name="contract_id"', {});
+verifie("le parent pointe l'arrivée", pointageParent.status === 200 || pointageParent.status === 303);
+const apresPointageParent = await texte(await GET(`${BASE}/parent`));
+verifie(
+  "présence visible côté parent",
+  apresPointageParent.includes("Chez l'assistante maternelle"),
+);
+
+// Bulletin côté parent (mêmes explications)
+const bulletinParent = await texte(
+  await GET(`${BASE}/parent/bulletins/${contractId}/${moisCourant}`),
+);
+verifie("bulletin parent : montant expliqué", bulletinParent.includes("554,40"));
+verifie("bulletin parent : déclaration copiable", bulletinParent.includes("Votre déclaration Pajemploi"));
+
+// Message structuré « absent demain »
+const messageAbsence = await postForm(
+  `${BASE}/parent/messages/${childId}`,
+  'value="absence"',
+  {},
+);
+verifie("message structuré envoyé", messageAbsence.status === 303);
+
+// --- Retour session assmat : confirmation du message
+jar.clear();
+for (const [k, v] of jarAssmat) jar.set(k, v);
+
+const filAssmat = await texte(await GET(`${BASE}/messages/${childId}`));
+verifie("l'assmat voit le message structuré", filAssmat.includes("absent"));
+
+const confirmation = await postForm(
+  `${BASE}/messages/${childId}`,
+  'name="message_id"',
+  {},
+);
+verifie("confirmation de l'absence", confirmation.status === 303);
+const filApres = await texte(await GET(`${BASE}/messages/${childId}`));
+verifie("message confirmé ✓", filApres.includes("Confirmé"));
+
 console.log(echecs === 0 ? "\n✅ Smoke test OK" : `\n❌ ${echecs} échec(s)`);
 process.exit(echecs === 0 ? 0 : 1);

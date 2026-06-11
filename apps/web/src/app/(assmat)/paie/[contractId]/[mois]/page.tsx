@@ -7,7 +7,7 @@ import {
   marquerDeclare,
   validerBulletin,
 } from "../../actions";
-import { BoutonCopier } from "../../bouton-copier";
+import { BoutonCopier } from "@/components/bouton-copier";
 
 function libelleMois(mois: string): string {
   return new Date(`${mois}-01T12:00:00`).toLocaleDateString("fr-FR", {
