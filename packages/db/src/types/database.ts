@@ -56,6 +56,73 @@ export type Database = {
           },
         ]
       }
+      attendance_events: {
+        Row: {
+          child_id: string
+          contract_id: string
+          corrige: boolean
+          created_at: string
+          horodatage: string
+          horodatage_device: string | null
+          id: string
+          motif_correction: string | null
+          pointe_par: string
+          type: Database["public"]["Enums"]["attendance_type"]
+          updated_at: string
+          valeur_initiale: string | null
+        }
+        Insert: {
+          child_id: string
+          contract_id: string
+          corrige?: boolean
+          created_at?: string
+          horodatage?: string
+          horodatage_device?: string | null
+          id?: string
+          motif_correction?: string | null
+          pointe_par: string
+          type: Database["public"]["Enums"]["attendance_type"]
+          updated_at?: string
+          valeur_initiale?: string | null
+        }
+        Update: {
+          child_id?: string
+          contract_id?: string
+          corrige?: boolean
+          created_at?: string
+          horodatage?: string
+          horodatage_device?: string | null
+          id?: string
+          motif_correction?: string | null
+          pointe_par?: string
+          type?: Database["public"]["Enums"]["attendance_type"]
+          updated_at?: string
+          valeur_initiale?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_events_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_events_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_events_pointe_par_fkey"
+            columns: ["pointe_par"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       authorizations: {
         Row: {
           actif: boolean
@@ -394,6 +461,104 @@ export type Database = {
           },
         ]
       }
+      daily_log_entries: {
+        Row: {
+          assmat_id: string
+          child_id: string
+          created_at: string
+          date: string
+          deleted_at: string | null
+          heure: string
+          id: string
+          payload: Json
+          type: Database["public"]["Enums"]["log_entry_type"]
+          updated_at: string
+          visible_parents: boolean
+        }
+        Insert: {
+          assmat_id: string
+          child_id: string
+          created_at?: string
+          date?: string
+          deleted_at?: string | null
+          heure?: string
+          id?: string
+          payload?: Json
+          type: Database["public"]["Enums"]["log_entry_type"]
+          updated_at?: string
+          visible_parents?: boolean
+        }
+        Update: {
+          assmat_id?: string
+          child_id?: string
+          created_at?: string
+          date?: string
+          deleted_at?: string | null
+          heure?: string
+          id?: string
+          payload?: Json
+          type?: Database["public"]["Enums"]["log_entry_type"]
+          updated_at?: string
+          visible_parents?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_log_entries_assmat_id_fkey"
+            columns: ["assmat_id"]
+            isOneToOne: false
+            referencedRelation: "assmats"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "daily_log_entries_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      daily_summaries: {
+        Row: {
+          child_id: string
+          contenu: Json
+          created_at: string
+          date: string
+          envoye_le: string | null
+          id: string
+          statut: Database["public"]["Enums"]["summary_status"]
+          updated_at: string
+        }
+        Insert: {
+          child_id: string
+          contenu?: Json
+          created_at?: string
+          date: string
+          envoye_le?: string | null
+          id?: string
+          statut?: Database["public"]["Enums"]["summary_status"]
+          updated_at?: string
+        }
+        Update: {
+          child_id?: string
+          contenu?: Json
+          created_at?: string
+          date?: string
+          envoye_le?: string | null
+          id?: string
+          statut?: Database["public"]["Enums"]["summary_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_summaries_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       planned_schedules: {
         Row: {
           contract_id: string
@@ -561,6 +726,7 @@ export type Database = {
       uuid_v7: { Args: never; Returns: string }
     }
     Enums: {
+      attendance_type: "in" | "out"
       authorization_type:
         | "sortie"
         | "transport"
@@ -570,11 +736,20 @@ export type Database = {
       contract_status: "brouillon" | "actif" | "termine"
       contract_type: "annee_complete" | "annee_incomplete"
       cp_versement_option: "juin" | "prise_principale" | "au_fil"
+      log_entry_type:
+        | "repas"
+        | "sieste"
+        | "change"
+        | "activite"
+        | "humeur"
+        | "note"
+        | "arrivee_info"
       profile_role: "assmat" | "parent"
       schedule_exception_type:
         | "absence_programmee"
         | "horaire_modifie"
         | "ferie"
+      summary_status: "genere" | "valide" | "envoye"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -702,6 +877,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      attendance_type: ["in", "out"],
       authorization_type: [
         "sortie",
         "transport",
@@ -712,12 +888,22 @@ export const Constants = {
       contract_status: ["brouillon", "actif", "termine"],
       contract_type: ["annee_complete", "annee_incomplete"],
       cp_versement_option: ["juin", "prise_principale", "au_fil"],
+      log_entry_type: [
+        "repas",
+        "sieste",
+        "change",
+        "activite",
+        "humeur",
+        "note",
+        "arrivee_info",
+      ],
       profile_role: ["assmat", "parent"],
       schedule_exception_type: [
         "absence_programmee",
         "horaire_modifie",
         "ferie",
       ],
+      summary_status: ["genere", "valide", "envoye"],
     },
   },
 } as const

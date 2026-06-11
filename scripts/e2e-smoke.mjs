@@ -1,0 +1,226 @@
+/**
+ * Smoke test e2e de Nido (HTTP, sans navigateur).
+ * Parcourt : connexion magic link → enfant → contrat → activation →
+ * pointage in/out (REST, comme le client) → repas → récap du soir.
+ *
+ * Prérequis : `supabase start` + `pnpm dev` (port 3001) + Mailpit (54324).
+ * Usage : node scripts/e2e-smoke.mjs
+ */
+
+const BASE = process.env.E2E_BASE_URL ?? "http://localhost:3001";
+const MAILPIT = "http://127.0.0.1:54324";
+const SUPABASE_URL = "http://127.0.0.1:54321";
+const APIKEY = "sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH";
+const EMAIL = `e2e.${Date.now()}@nido.fr`;
+
+const jar = new Map();
+
+function cookieHeader() {
+  return [...jar.entries()].map(([k, v]) => `${k}=${v}`).join("; ");
+}
+
+function absorbeCookies(response) {
+  for (const sc of response.headers.getSetCookie?.() ?? []) {
+    const [paire] = sc.split(";");
+    const i = paire.indexOf("=");
+    const nom = paire.slice(0, i).trim();
+    const valeur = paire.slice(i + 1).trim();
+    if (valeur === "" || /expires=Thu, 01 Jan 1970/i.test(sc)) jar.delete(nom);
+    else jar.set(nom, valeur);
+  }
+}
+
+async function GET(url) {
+  const r = await fetch(url, {
+    headers: { cookie: cookieHeader() },
+    redirect: "manual",
+  });
+  absorbeCookies(r);
+  return r;
+}
+
+/** Texte HTML sans les commentaires insérés par React entre les nœuds. */
+async function texte(response) {
+  return (await response.text()).replaceAll(/<!--.*?-->/g, "");
+}
+
+/** Poste le formulaire de `pageUrl` contenant `marqueur` (progressive enhancement). */
+async function postForm(pageUrl, marqueur, champs, posteUrl = pageUrl) {
+  const page = await GET(pageUrl);
+  const html = await page.text();
+  const forms = html.match(/<form[\s\S]*?<\/form>/g) ?? [];
+  const form = forms.find((f) => f.includes(marqueur));
+  if (!form) throw new Error(`Formulaire « ${marqueur} » introuvable sur ${pageUrl}`);
+  const actionId = form.match(/\$ACTION_ID_[a-f0-9]+/)?.[0];
+  if (!actionId) throw new Error(`ACTION_ID introuvable dans le formulaire « ${marqueur} »`);
+
+  const fd = new FormData();
+  fd.set(actionId, "");
+  for (const [k, v] of Object.entries(champs)) fd.set(k, v);
+
+  const r = await fetch(posteUrl, {
+    method: "POST",
+    headers: { cookie: cookieHeader(), origin: BASE },
+    body: fd,
+    redirect: "manual",
+  });
+  absorbeCookies(r);
+  return { status: r.status, location: r.headers.get("location") ?? "" };
+}
+
+function tokenDepuisJar() {
+  const morceaux = [...jar.entries()]
+    .filter(([k]) => /^sb-.*auth-token(\.\d+)?$/.test(k))
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, v]) => v)
+    .join("");
+  const brut = decodeURIComponent(morceaux);
+  const json = JSON.parse(
+    Buffer.from(brut.replace(/^base64-/, ""), "base64").toString("utf8"),
+  );
+  return { token: json.access_token, userId: json.user.id };
+}
+
+let echecs = 0;
+function verifie(nom, condition) {
+  console.log(`${condition ? "✓" : "✗"} ${nom}`);
+  if (!condition) echecs++;
+}
+
+// ---------------------------------------------------------------------------
+// 1. Connexion magic link
+const envoi = await postForm(`${BASE}/login`, 'name="email"', { email: EMAIL });
+verifie("envoi du lien magique", envoi.location.includes("envoye=1"));
+
+await new Promise((r) => setTimeout(r, 2000));
+const messages = await (await fetch(`${MAILPIT}/api/v1/messages`)).json();
+const message = await (
+  await fetch(`${MAILPIT}/api/v1/message/${messages.messages[0].ID}`)
+).json();
+const lien = message.HTML.match(/href="([^"]*token_hash[^"]*)"/)[1]
+  .replaceAll("&amp;", "&")
+  .replace("localhost:3000", new URL(BASE).host);
+const confirm = await GET(lien);
+verifie("clic sur le lien magique", confirm.status === 307);
+const home = await GET(`${BASE}/`);
+verifie("connecté sur Ma journée", (await texte(home)).includes("Bonjour"));
+
+// 2. Enfant
+const enfant = await postForm(`${BASE}/enfants/nouveau`, 'name="prenom"', {
+  prenom: "Léa",
+  nom: "Martin",
+  date_naissance: "2024-05-12",
+  tuteur_prenom: "Marc",
+  tuteur_nom: "Martin",
+  tuteur_email: "marc@test.fr",
+});
+verifie("création de l'enfant", /^\/enfants\/[0-9a-f-]+$/.test(enfant.location));
+const childId = enfant.location.split("/").pop();
+const fiche = await texte(await GET(`${BASE}${enfant.location}`));
+verifie("fiche : prénom accentué intact", fiche.includes("Léa"));
+verifie("fiche : tuteur employeur", fiche.includes("Marc") && fiche.includes("employeur"));
+
+// 3. Contrat (formulaire simulateur)
+const contrat = await postForm(`${BASE}/contrats/nouveau`, 'name="child_id"', {
+  child_id: childId,
+  type: "annee_incomplete",
+  taux_horaire: "4.2",
+  heures_par_semaine: "36",
+  semaines_programmees: "44",
+  jours_accueil_par_semaine: "4",
+  taux_majoration_pct: "12",
+  indemnite_entretien_jour: "4.6",
+  date_debut: "2026-09-01",
+  option_versement_cp: "au_fil",
+  parent_peut_pointer: "on",
+});
+verifie("création du contrat", /^\/contrats\/[0-9a-f-]+$/.test(contrat.location));
+const contractId = contrat.location.split("/").pop();
+
+// 4. Activation
+const activation = await postForm(
+  `${BASE}/contrats/${contractId}`,
+  ">Activer<",
+  { contract_id: contractId },
+);
+verifie("activation du contrat", activation.status === 303);
+
+// 5. Ma journée affiche l'enfant
+const journee = await texte(await GET(`${BASE}/`));
+verifie("Ma journée : Léa visible", journee.includes("Léa"));
+verifie("Ma journée : compteur 0 présent", journee.includes("0/1"));
+
+// 6. Pointage arrivée via REST (RLS + trigger horodatage serveur)
+const { token, userId } = tokenDepuisJar();
+const restHeaders = {
+  apikey: APIKEY,
+  authorization: `Bearer ${token}`,
+  "content-type": "application/json",
+  prefer: "return=representation",
+};
+const rIn = await fetch(`${SUPABASE_URL}/rest/v1/attendance_events`, {
+  method: "POST",
+  headers: restHeaders,
+  body: JSON.stringify({
+    contract_id: contractId,
+    child_id: childId,
+    type: "in",
+    pointe_par: userId,
+    horodatage: "2020-01-01T00:00:00Z", // doit être écrasé par le serveur
+  }),
+});
+const [pointageIn] = await rIn.json();
+verifie("pointage arrivée accepté", rIn.status === 201);
+verifie(
+  "horodatage serveur imposé",
+  pointageIn && !pointageIn.horodatage.startsWith("2020"),
+);
+
+const presente = await texte(await GET(`${BASE}/`));
+verifie("compteur 1/1 présent", presente.includes("1/1"));
+verifie("saisie rapide visible", presente.includes("Repas"));
+
+// 7. Repas via formulaire de saisie rapide
+const repas = await postForm(`${BASE}/`, 'value="repas"', {
+  child_id: childId,
+  type: "repas",
+  quantite: "bien",
+});
+// Pas de redirect après la saisie rapide (revalidation sur place) : 200 attendu.
+verifie("repas enregistré", repas.status === 200 || repas.status === 303);
+
+// 8. Pointage départ
+await fetch(`${SUPABASE_URL}/rest/v1/attendance_events`, {
+  method: "POST",
+  headers: restHeaders,
+  body: JSON.stringify({
+    contract_id: contractId,
+    child_id: childId,
+    type: "out",
+    pointe_par: userId,
+  }),
+});
+const apresDepart = await texte(await GET(`${BASE}/`));
+verifie("récap du soir proposé", apresDepart.includes("récap du soir"));
+
+// 9. Récap : génération, lecture, envoi
+const dateJour = new Date().toISOString().slice(0, 10);
+const generation = await postForm(`${BASE}/`, "récap du soir", {
+  child_id: childId,
+  date: dateJour,
+});
+verifie("génération du récap", generation.location.startsWith(`/recap/${childId}`));
+const pageRecap = await texte(await GET(`${BASE}${generation.location}`));
+verifie("récap : repas présent", pageRecap.includes("bien mangé"));
+
+const envoi2 = await postForm(
+  `${BASE}${generation.location}`,
+  'name="mot_du_jour"',
+  { child_id: childId, date: dateJour, mot_du_jour: "Très belle journée !" },
+);
+verifie("envoi du récap", envoi2.status === 303);
+const final = await texte(await GET(`${BASE}/`));
+verifie("Ma journée : récap envoyé", final.includes("Récap du soir envoyé"));
+
+console.log(echecs === 0 ? "\n✅ Smoke test OK" : `\n❌ ${echecs} échec(s)`);
+process.exit(echecs === 0 ? 0 : 1);
