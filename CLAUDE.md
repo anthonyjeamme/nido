@@ -28,6 +28,9 @@ explicite du précédent par l'utilisateur.
    lancés par `supabase test db`). Un parent ne doit jamais voir les données d'un autre enfant.
 5. **Migrations SQL uniquement via fichiers versionnés** dans `supabase/migrations/` —
    jamais de modification manuelle du schéma (ni en local, ni dans le dashboard cloud).
+   Chaque migration qui crée une table déclare aussi ses **GRANT explicites** (anon /
+   authenticated / service_role) : Supabase n'accorde plus de privilèges par défaut,
+   RLS filtre les lignes mais l'accès à la table doit être accordé.
 6. **Écritures sensibles** (génération de bulletin, correction de pointage) : fonctions RPC
    `security definer` qui journalisent dans `audit_log`, jamais d'écriture directe.
 7. **Texte UI en français, vouvoiement, ton chaleureux et simple** (utilisatrices non techniques).
