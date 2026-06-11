@@ -1,0 +1,19 @@
+<html>
+  <body style="font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; color: #18181b; padding: 24px;">
+    <h2 style="margin: 0 0 8px;">Votre lien de connexion Nido</h2>
+    <p>Bonjour,</p>
+    <p>Cliquez sur le bouton ci-dessous pour vous connecter à Nido :</p>
+    <p style="margin: 24px 0;">
+      <a
+        href="{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=email"
+        style="background: #18181b; color: #ffffff; padding: 12px 24px; border-radius: 12px; text-decoration: none; display: inline-block;"
+      >
+        Me connecter
+      </a>
+    </p>
+    <p style="color: #71717a; font-size: 13px;">
+      Ce lien est valable une heure et ne peut être utilisé qu'une seule fois.<br />
+      Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail.
+    </p>
+  </body>
+</html>
