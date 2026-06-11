@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { declarerAbsence, genererBulletinMensuel } from "./actions";
 
 const champ =
-  "h-11 rounded-xl border border-zinc-300 px-3 text-sm outline-none focus:border-zinc-900";
+  "h-11 rounded-xl border border-stone-300 bg-white px-3 text-sm outline-none focus:border-stone-900";
 
 function moisRecents(nombre: number): string[] {
   const liste: string[] = [];
@@ -58,7 +58,7 @@ export default async function PaiePage({
       )}
 
       {!contrats?.length ? (
-        <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 text-sm text-zinc-600">
+        <p className="rounded-2xl border border-stone-200 bg-stone-50 p-6 text-sm text-stone-600">
           Activez un contrat pour générer vos bulletins : chaque ligne sera
           expliquée (formule, valeurs, source réglementaire) et la déclaration
           Pajemploi pré-remplie.
@@ -77,23 +77,23 @@ export default async function PaiePage({
                 return (
                   <li
                     key={m}
-                    className="flex items-center justify-between gap-2 rounded-2xl border border-zinc-200 p-4"
+                    className="flex items-center justify-between gap-2 rounded-2xl border border-stone-200 bg-white p-4"
                   >
                     <div>
                       <p className="font-medium capitalize">{libelleMois(m)}</p>
                       {bulletin ? (
-                        <p className="text-sm text-zinc-500">
+                        <p className="text-sm text-stone-500">
                           {euros(Number(bulletin.total_du))} ·{" "}
                           {bulletin.statut === "valide" ? "validé" : "brouillon"}
                         </p>
                       ) : (
-                        <p className="text-sm text-zinc-400">Pas encore généré</p>
+                        <p className="text-sm text-stone-400">Pas encore généré</p>
                       )}
                     </div>
                     {bulletin ? (
                       <Link
                         href={`/paie/${contrat.id}/${m}`}
-                        className="rounded-xl border border-zinc-300 px-4 py-2 text-sm active:bg-zinc-50"
+                        className="rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm active:bg-stone-50"
                       >
                         Voir
                       </Link>
@@ -103,7 +103,7 @@ export default async function PaiePage({
                         <input type="hidden" name="mois" value={m} />
                         <button
                           type="submit"
-                          className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white active:scale-[0.98]"
+                          className="rounded-xl bg-stone-900 px-4 py-2 text-sm font-medium text-white active:scale-[0.98]"
                         >
                           Générer
                         </button>
@@ -114,8 +114,8 @@ export default async function PaiePage({
               })}
             </ul>
 
-            <details className="rounded-2xl border border-dashed border-zinc-300 p-4">
-              <summary className="cursor-pointer text-sm text-zinc-600">
+            <details className="rounded-2xl border border-dashed border-stone-300 p-4">
+              <summary className="cursor-pointer text-sm text-stone-600">
                 + Déclarer une absence sur ce contrat
               </summary>
               <form action={declarerAbsence} className="mt-3 flex flex-col gap-2">
@@ -132,26 +132,26 @@ export default async function PaiePage({
                   <option value="sans_solde">Sans solde</option>
                 </select>
                 <div className="grid grid-cols-2 gap-2">
-                  <label className="flex flex-col gap-1 text-xs text-zinc-600">
+                  <label className="flex flex-col gap-1 text-xs text-stone-600">
                     Du
                     <input name="date_debut" type="date" required className={champ} />
                   </label>
-                  <label className="flex flex-col gap-1 text-xs text-zinc-600">
+                  <label className="flex flex-col gap-1 text-xs text-stone-600">
                     Au
                     <input name="date_fin" type="date" className={champ} />
                   </label>
-                  <label className="flex flex-col gap-1 text-xs text-zinc-600">
+                  <label className="flex flex-col gap-1 text-xs text-stone-600">
                     Heures d&apos;accueil manquées
                     <input name="heures" type="number" step="0.5" min="0" required className={champ} />
                   </label>
-                  <label className="flex flex-col gap-1 text-xs text-zinc-600">
+                  <label className="flex flex-col gap-1 text-xs text-stone-600">
                     Jours d&apos;accueil manqués
                     <input name="jours" type="number" step="0.5" min="0" required className={champ} />
                   </label>
                 </div>
                 <button
                   type="submit"
-                  className="h-11 rounded-xl bg-zinc-900 text-sm font-medium text-white active:scale-[0.98]"
+                  className="h-11 rounded-xl bg-stone-900 text-sm font-medium text-white active:scale-[0.98]"
                 >
                   Enregistrer l&apos;absence
                 </button>

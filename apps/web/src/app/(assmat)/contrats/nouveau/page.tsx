@@ -23,11 +23,11 @@ export default async function NouveauContratPage({
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-5 p-4">
       <div>
-        <Link href="/contrats" className="text-sm text-zinc-500">
+        <Link href="/contrats" className="text-sm text-stone-500">
           ‹ Contrats
         </Link>
         <h1 className="mt-1 text-2xl font-bold">Nouveau contrat</h1>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-stone-500">
           Faites varier les paramètres : la mensualisation se met à jour en
           direct, idéal pendant l&apos;entretien avec les parents.
         </p>
@@ -42,7 +42,7 @@ export default async function NouveauContratPage({
       )}
 
       {!enfants?.length ? (
-        <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 text-sm text-zinc-600">
+        <p className="rounded-2xl border border-stone-200 bg-stone-50 p-6 text-sm text-stone-600">
           Ajoutez d&apos;abord un enfant pour créer son contrat.{" "}
           <Link href="/enfants/nouveau" className="underline">
             Ajouter un enfant

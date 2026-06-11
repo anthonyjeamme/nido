@@ -20,13 +20,13 @@ export default async function BulletinsParentPage() {
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-4 p-4">
       <h1 className="text-2xl font-bold">Bulletins</h1>
-      <p className="text-sm text-zinc-500">
+      <p className="text-sm text-stone-500">
         Chaque montant est expliqué ligne par ligne — exactement ce que voit
         votre assistante maternelle. Montants nets estimés, Pajemploi fait foi.
       </p>
 
       {!bulletins?.length ? (
-        <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 text-sm text-zinc-600">
+        <p className="rounded-2xl border border-stone-200 bg-stone-50 p-6 text-sm text-stone-600">
           Aucun bulletin pour le moment.
         </p>
       ) : (
@@ -35,13 +35,13 @@ export default async function BulletinsParentPage() {
             <li key={bulletin.id}>
               <Link
                 href={`/parent/bulletins/${bulletin.contract_id}/${bulletin.mois.slice(0, 7)}`}
-                className="flex items-center justify-between rounded-2xl border border-zinc-200 p-4 active:bg-zinc-50"
+                className="flex items-center justify-between rounded-2xl border border-stone-200 bg-white p-4 active:bg-stone-50"
               >
                 <span>
                   <span className="block font-medium capitalize">
                     {libelleMois(bulletin.mois)}
                   </span>
-                  <span className="text-sm text-zinc-500">
+                  <span className="text-sm text-stone-500">
                     {bulletin.contracts?.children?.prenom} ·{" "}
                     {bulletin.statut === "valide" ? "validé" : "brouillon"}
                   </span>

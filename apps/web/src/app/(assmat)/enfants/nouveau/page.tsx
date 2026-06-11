@@ -1,7 +1,7 @@
 import { creerEnfant } from "../actions";
 
 const champ =
-  "h-12 rounded-xl border border-zinc-300 px-4 text-base outline-none focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10";
+  "h-12 rounded-xl border border-stone-300 bg-white px-4 text-base outline-none focus:border-stone-900 focus:ring-2 focus:ring-stone-900/10";
 
 export default async function NouvelEnfantPage({
   searchParams,
@@ -36,8 +36,8 @@ export default async function NouvelEnfantPage({
           <input name="date_naissance" type="date" required className={champ} />
         </label>
 
-        <fieldset className="flex flex-col gap-4 rounded-2xl border border-zinc-200 p-4">
-          <legend className="px-1 text-sm font-medium text-zinc-600">
+        <fieldset className="flex flex-col gap-4 rounded-2xl border border-stone-200 bg-white p-4">
+          <legend className="px-1 text-sm font-medium text-stone-600">
             Parent employeur (facultatif, modifiable ensuite)
           </legend>
           <label className="flex flex-col gap-1.5">
@@ -56,7 +56,7 @@ export default async function NouvelEnfantPage({
 
         <button
           type="submit"
-          className="h-12 rounded-xl bg-zinc-900 font-medium text-white active:scale-[0.98]"
+          className="h-12 rounded-xl bg-stone-900 font-medium text-white active:scale-[0.98]"
         >
           Ajouter l&apos;enfant
         </button>

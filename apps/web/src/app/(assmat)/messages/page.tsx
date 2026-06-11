@@ -44,28 +44,28 @@ export default async function MessagesAssmatPage() {
     <div className="mx-auto flex max-w-lg flex-col gap-4 p-4">
       <h1 className="text-2xl font-bold">Messages</h1>
 
-      <details className="rounded-2xl border border-zinc-200 p-4">
+      <details className="rounded-2xl border border-stone-200 bg-white p-4">
         <summary className="cursor-pointer text-sm font-medium">
           🔕 Mes horaires de disponibilité
           {plage ? ` : ${plage.debut} – ${plage.fin}` : " (non définis)"}
         </summary>
-        <p className="mt-2 text-xs text-zinc-500">
+        <p className="mt-2 text-xs text-stone-500">
           Hors de ces horaires, les parents sont prévenus que leur message
           sera lu plus tard — et vous ne recevrez pas de notification.
         </p>
         <form action={reglerPlageDispo} className="mt-3 flex items-center gap-2">
           <input
             name="debut" type="time" defaultValue={plage?.debut ?? "07:30"}
-            className="h-10 rounded-lg border border-zinc-300 px-2 text-sm"
+            className="h-10 rounded-lg border border-stone-300 bg-white px-2 text-sm"
           />
-          <span className="text-zinc-400">→</span>
+          <span className="text-stone-400">→</span>
           <input
             name="fin" type="time" defaultValue={plage?.fin ?? "19:00"}
-            className="h-10 rounded-lg border border-zinc-300 px-2 text-sm"
+            className="h-10 rounded-lg border border-stone-300 bg-white px-2 text-sm"
           />
           <button
             type="submit"
-            className="rounded-xl border border-zinc-300 px-3 py-2 text-sm active:bg-zinc-50"
+            className="rounded-xl border border-stone-300 bg-white px-3 py-2 text-sm active:bg-stone-50"
           >
             Enregistrer
           </button>
@@ -87,7 +87,7 @@ export default async function MessagesAssmatPage() {
             <li key={enfant.id}>
               <Link
                 href={`/messages/${enfant.id}`}
-                className="flex items-center gap-3 rounded-2xl border border-zinc-200 p-4 active:bg-zinc-50"
+                className="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white p-4 active:bg-stone-50"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-lg">
                   {enfant.prenom[0]}
@@ -101,11 +101,11 @@ export default async function MessagesAssmatPage() {
                       </span>
                     )}
                   </span>
-                  <span className="block truncate text-sm text-zinc-500">
+                  <span className="block truncate text-sm text-stone-500">
                     {dernier?.contenu ?? "Aucun message"}
                   </span>
                 </span>
-                <span className="text-zinc-300">›</span>
+                <span className="text-stone-300">›</span>
               </Link>
             </li>
           );

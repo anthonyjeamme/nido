@@ -99,7 +99,7 @@ export function PointageBouton({
       onClick={onClick}
       disabled={pending}
       className={`h-12 flex-1 rounded-xl font-medium text-white transition active:scale-[0.98] disabled:opacity-60 ${
-        type === "in" ? "bg-emerald-600" : "bg-zinc-700"
+        type === "in" ? "bg-emerald-600" : "bg-stone-700"
       }`}
     >
       {pending ? "…" : enAttente ? "En attente de réseau ⏳" : label}

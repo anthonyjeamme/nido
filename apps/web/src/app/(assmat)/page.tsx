@@ -74,10 +74,10 @@ export default async function MaJourneePage() {
 
       <Link
         href="/menus"
-        className="flex items-center justify-between rounded-2xl border border-zinc-200 px-4 py-3 text-sm active:bg-zinc-50"
+        className="flex items-center justify-between rounded-2xl border border-stone-200 px-4 py-3 text-sm active:bg-stone-50"
       >
         <span>🍽️ Menus de la semaine</span>
-        <span className="text-zinc-300">›</span>
+        <span className="text-stone-300">›</span>
       </Link>
 
       {presents > capacite && (
@@ -88,15 +88,15 @@ export default async function MaJourneePage() {
       )}
 
       {!lignes.length ? (
-        <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
+        <div className="flex flex-col gap-3 rounded-2xl border border-stone-200 bg-stone-50 p-6">
           <p className="font-medium">Aucun contrat actif aujourd&apos;hui.</p>
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm text-stone-600">
             Ajoutez un enfant puis activez son contrat : votre journée
             s&apos;affichera ici, avec le pointage en un geste.
           </p>
           <Link
             href="/enfants/nouveau"
-            className="rounded-xl bg-zinc-900 px-4 py-3 text-center font-medium text-white active:scale-[0.98]"
+            className="rounded-xl bg-stone-900 px-4 py-3 text-center font-medium text-white active:scale-[0.98]"
           >
             Ajouter un enfant
           </Link>
@@ -113,13 +113,13 @@ export default async function MaJourneePage() {
               <li
                 key={contrat.id}
                 className={`flex flex-col gap-3 rounded-2xl border p-4 ${
-                  present ? "border-emerald-300 bg-emerald-50/40" : "border-zinc-200"
+                  present ? "border-emerald-300 bg-emerald-50/40" : "border-stone-200"
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-semibold">{enfant.prenom}</p>
-                    <p className="text-xs text-zinc-500">
+                    <p className="text-xs text-stone-500">
                       {creneau
                         ? `Prévu ${creneau.heure_debut.slice(0, 5)} – ${creneau.heure_fin.slice(0, 5)}`
                         : "Pas de créneau prévu aujourd'hui"}

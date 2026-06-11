@@ -38,7 +38,7 @@ export default async function FilAssmatPage({
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-4 p-4">
       <div>
-        <Link href="/messages" className="text-sm text-zinc-500">
+        <Link href="/messages" className="text-sm text-stone-500">
           ‹ Messages
         </Link>
         <h1 className="mt-1 text-2xl font-bold">Famille de {enfant.prenom}</h1>
@@ -52,12 +52,12 @@ export default async function FilAssmatPage({
               key={message.id}
               className={`max-w-[85%] rounded-2xl p-3 text-sm ${
                 deMoi
-                  ? "self-end bg-zinc-900 text-white"
-                  : "self-start border border-zinc-200 bg-white"
+                  ? "self-end bg-stone-900 text-white"
+                  : "self-start border border-stone-200 bg-white"
               }`}
             >
               <p>{message.contenu}</p>
-              <p className={`mt-1 text-xs ${deMoi ? "text-zinc-400" : "text-zinc-400"}`}>
+              <p className={`mt-1 text-xs ${deMoi ? "text-stone-400" : "text-stone-400"}`}>
                 {new Date(message.created_at).toLocaleString("fr-FR", {
                   day: "numeric", month: "short", hour: "2-digit", minute: "2-digit",
                 })}
@@ -90,11 +90,11 @@ export default async function FilAssmatPage({
           name="contenu"
           required
           placeholder="Votre message…"
-          className="h-12 flex-1 rounded-xl border border-zinc-300 px-4 text-base outline-none focus:border-zinc-900"
+          className="h-12 flex-1 rounded-xl border border-stone-300 bg-white px-4 text-base outline-none focus:border-stone-900"
         />
         <button
           type="submit"
-          className="h-12 rounded-xl bg-zinc-900 px-5 font-medium text-white active:scale-[0.98]"
+          className="h-12 rounded-xl bg-stone-900 px-5 font-medium text-white active:scale-[0.98]"
         >
           Envoyer
         </button>

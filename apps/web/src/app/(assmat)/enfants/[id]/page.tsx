@@ -7,7 +7,7 @@ import { ajouterTuteur, basculerAutorisation, majSante } from "../actions";
 import { SanteSection } from "./sante-section";
 
 const champ =
-  "h-11 rounded-xl border border-zinc-300 px-3 text-base outline-none focus:border-zinc-900";
+  "h-11 rounded-xl border border-stone-300 bg-white px-3 text-base outline-none focus:border-stone-900";
 
 const AUTORISATIONS: {
   type: "sortie" | "transport" | "photo" | "medicament";
@@ -72,13 +72,13 @@ export default async function FicheEnfantPage({
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-6 p-4">
       <div>
-        <Link href="/enfants" className="text-sm text-zinc-500">
+        <Link href="/enfants" className="text-sm text-stone-500">
           ‹ Enfants
         </Link>
         <h1 className="mt-1 text-2xl font-bold">
           {enfant.prenom} {enfant.nom}
         </h1>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-stone-500">
           Né(e) le {new Date(enfant.date_naissance).toLocaleDateString("fr-FR")}
         </p>
       </div>
@@ -97,13 +97,13 @@ export default async function FicheEnfantPage({
             <Link
               key={c.id}
               href={`/contrats/${c.id}`}
-              className="flex items-center justify-between rounded-2xl border border-zinc-200 p-4 active:bg-zinc-50"
+              className="flex items-center justify-between rounded-2xl border border-stone-200 bg-white p-4 active:bg-stone-50"
             >
               <span>
                 Contrat du{" "}
                 {new Date(c.date_debut).toLocaleDateString("fr-FR")}
               </span>
-              <span className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs">
+              <span className="rounded-full bg-stone-100 px-2.5 py-0.5 text-xs">
                 {c.statut}
               </span>
             </Link>
@@ -111,7 +111,7 @@ export default async function FicheEnfantPage({
         ) : (
           <Link
             href={`/contrats/nouveau?enfant=${enfant.id}`}
-            className="rounded-2xl border border-dashed border-zinc-300 p-4 text-center text-sm text-zinc-600 active:bg-zinc-50"
+            className="rounded-2xl border border-dashed border-stone-300 p-4 text-center text-sm text-stone-600 active:bg-stone-50"
           >
             + Créer le contrat de {enfant.prenom}
           </Link>
@@ -121,10 +121,10 @@ export default async function FicheEnfantPage({
       {/* Santé */}
       <section className="flex flex-col gap-2">
         <h2 className="font-semibold">Santé</h2>
-        <form action={majSante} className="flex flex-col gap-2 rounded-2xl border border-zinc-200 p-4">
+        <form action={majSante} className="flex flex-col gap-2 rounded-2xl border border-stone-200 bg-white p-4">
           <input type="hidden" name="child_id" value={enfant.id} />
           <label className="flex flex-col gap-1.5">
-            <span className="text-sm text-zinc-600">
+            <span className="text-sm text-stone-600">
               Allergies (séparées par des virgules)
             </span>
             <input
@@ -136,7 +136,7 @@ export default async function FicheEnfantPage({
           </label>
           <button
             type="submit"
-            className="self-end rounded-xl border border-zinc-300 px-4 py-2 text-sm active:bg-zinc-50"
+            className="self-end rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm active:bg-stone-50"
           >
             Enregistrer
           </button>
@@ -153,7 +153,7 @@ export default async function FicheEnfantPage({
       {/* Autorisations */}
       <section className="flex flex-col gap-2">
         <h2 className="font-semibold">Autorisations parentales</h2>
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-stone-500">
           Chaque autorisation est horodatée et signée. Sans autorisation «
           Photos » active, aucune photo ne peut être partagée ; sans
           autorisation « Médicaments », aucune administration ne peut être
@@ -166,11 +166,11 @@ export default async function FicheEnfantPage({
             return (
               <li
                 key={def.type}
-                className="flex items-center gap-3 rounded-2xl border border-zinc-200 p-4"
+                className="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white p-4"
               >
                 <div className="flex-1">
                   <p className="font-medium">{def.label}</p>
-                  <p className="text-xs text-zinc-500">{def.description}</p>
+                  <p className="text-xs text-stone-500">{def.description}</p>
                   {active && existante?.signe_le && (
                     <p className="mt-1 text-xs text-emerald-700">
                       Signée le{" "}
@@ -178,7 +178,7 @@ export default async function FicheEnfantPage({
                     </p>
                   )}
                   {def.type === "photo" && active && (
-                    <p className="text-xs text-zinc-500">
+                    <p className="text-xs text-stone-500">
                       Niveau : {existante?.niveau ?? "privees_parents"}
                     </p>
                   )}
@@ -195,7 +195,7 @@ export default async function FicheEnfantPage({
                     className={`rounded-full px-4 py-2 text-sm font-medium ${
                       active
                         ? "bg-emerald-100 text-emerald-800"
-                        : "bg-zinc-100 text-zinc-500"
+                        : "bg-stone-100 text-stone-500"
                     }`}
                   >
                     {active ? "Active" : "Inactive"}
@@ -214,7 +214,7 @@ export default async function FicheEnfantPage({
           {tuteurs?.map((t) => (
             <li
               key={t.id}
-              className="rounded-2xl border border-zinc-200 p-4"
+              className="rounded-2xl border border-stone-200 bg-white p-4"
             >
               <p className="font-medium">
                 {t.prenom} {t.nom}{" "}
@@ -224,7 +224,7 @@ export default async function FicheEnfantPage({
                   </span>
                 )}
               </p>
-              <p className="text-sm text-zinc-500">
+              <p className="text-sm text-stone-500">
                 {[t.email, t.telephone].filter(Boolean).join(" · ") || "—"}
               </p>
               {t.profile_id ? (
@@ -246,8 +246,8 @@ export default async function FicheEnfantPage({
           ))}
         </ul>
 
-        <details className="rounded-2xl border border-dashed border-zinc-300 p-4">
-          <summary className="cursor-pointer text-sm text-zinc-600">
+        <details className="rounded-2xl border border-dashed border-stone-300 p-4">
+          <summary className="cursor-pointer text-sm text-stone-600">
             + Ajouter un parent / responsable
           </summary>
           <form action={ajouterTuteur} className="mt-3 flex flex-col gap-3">
@@ -264,7 +264,7 @@ export default async function FicheEnfantPage({
             </label>
             <button
               type="submit"
-              className="h-11 rounded-xl bg-zinc-900 text-sm font-medium text-white active:scale-[0.98]"
+              className="h-11 rounded-xl bg-stone-900 text-sm font-medium text-white active:scale-[0.98]"
             >
               Ajouter
             </button>

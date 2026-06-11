@@ -60,7 +60,7 @@ export default async function ContratPage({
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-6 p-4">
       <div>
-        <Link href="/contrats" className="text-sm text-zinc-500">
+        <Link href="/contrats" className="text-sm text-stone-500">
           ‹ Contrats
         </Link>
         <div className="mt-1 flex items-center justify-between">
@@ -79,7 +79,7 @@ export default async function ContratPage({
             </form>
           )}
         </div>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-stone-500">
           {contrat.type === "annee_complete"
             ? "Année complète (52 semaines)"
             : `Année incomplète (${contrat.semaines_programmees} semaines)`}{" "}
@@ -89,7 +89,7 @@ export default async function ContratPage({
       </div>
 
       {/* Mensualisation expliquée */}
-      <section className="rounded-2xl border border-zinc-200 p-4">
+      <section className="rounded-2xl border border-stone-200 bg-white p-4">
         <h2 className="font-semibold">Mensualisation</h2>
         {moisType.lignes.map((ligne) => (
           <details key={ligne.code} className="mt-2">
@@ -99,7 +99,7 @@ export default async function ContratPage({
                 {euros(ligne.montant)}
               </span>
             </summary>
-            <div className="mt-2 rounded-xl bg-zinc-50 p-3 text-xs text-zinc-600">
+            <div className="mt-2 rounded-xl bg-stone-50 p-3 text-xs text-stone-600">
               <p className="font-mono">{ligne.formule}</p>
               <ul className="mt-1">
                 {Object.entries(ligne.inputs).map(([cle, valeur]) => (
@@ -112,7 +112,7 @@ export default async function ContratPage({
             </div>
           </details>
         ))}
-        <div className="mt-3 flex items-center justify-between border-t border-zinc-100 pt-3">
+        <div className="mt-3 flex items-center justify-between border-t border-stone-100 pt-3">
           <span className="text-sm font-medium">Indemnité d&apos;entretien</span>
           <span className="text-sm tabular-nums">
             {euros(Number(contrat.indemnite_entretien_jour))} / jour de présence
@@ -129,9 +129,9 @@ export default async function ContratPage({
       </section>
 
       {/* Réglages parents */}
-      <section className="rounded-2xl border border-zinc-200 p-4 text-sm">
+      <section className="rounded-2xl border border-stone-200 bg-white p-4 text-sm">
         <h2 className="font-semibold">Accès des parents</h2>
-        <p className="mt-1 text-zinc-600">
+        <p className="mt-1 text-stone-600">
           Pointage par les parents :{" "}
           <span className="font-medium">
             {contrat.parent_peut_pointer ? "autorisé" : "désactivé"}
@@ -144,7 +144,7 @@ export default async function ContratPage({
         <h2 className="font-semibold">Semaine type</h2>
         <form
           action={majPlanning}
-          className="flex flex-col gap-2 rounded-2xl border border-zinc-200 p-4"
+          className="flex flex-col gap-2 rounded-2xl border border-stone-200 bg-white p-4"
         >
           <input type="hidden" name="contract_id" value={contrat.id} />
           {JOURS.map((jour, index) => {
@@ -156,21 +156,21 @@ export default async function ContratPage({
                   type="time"
                   name={`debut_${index + 1}`}
                   defaultValue={ligne?.heure_debut?.slice(0, 5) ?? ""}
-                  className="h-10 flex-1 rounded-lg border border-zinc-300 px-2 text-sm"
+                  className="h-10 flex-1 rounded-lg border border-stone-300 bg-white px-2 text-sm"
                 />
-                <span className="text-zinc-400">→</span>
+                <span className="text-stone-400">→</span>
                 <input
                   type="time"
                   name={`fin_${index + 1}`}
                   defaultValue={ligne?.heure_fin?.slice(0, 5) ?? ""}
-                  className="h-10 flex-1 rounded-lg border border-zinc-300 px-2 text-sm"
+                  className="h-10 flex-1 rounded-lg border border-stone-300 bg-white px-2 text-sm"
                 />
               </div>
             );
           })}
           <button
             type="submit"
-            className="mt-2 self-end rounded-xl border border-zinc-300 px-4 py-2 text-sm active:bg-zinc-50"
+            className="mt-2 self-end rounded-xl border border-stone-300 bg-white px-4 py-2 text-sm active:bg-stone-50"
           >
             Enregistrer la semaine type
           </button>

@@ -15,7 +15,7 @@ export function BoutonCopier({ valeur }: { valeur: string | number }) {
         setTimeout(() => setCopie(false), 1500);
       }}
       className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
-        copie ? "bg-emerald-100 text-emerald-800" : "bg-zinc-100 text-zinc-700 active:bg-zinc-200"
+        copie ? "bg-emerald-100 text-emerald-800" : "bg-stone-100 text-stone-700 active:bg-stone-200"
       }`}
     >
       {copie ? "Copié ✓" : "Copier"}

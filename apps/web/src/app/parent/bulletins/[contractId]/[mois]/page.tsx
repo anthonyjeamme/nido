@@ -56,32 +56,32 @@ export default async function BulletinParentPage({
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-5 p-4">
       <div>
-        <Link href="/parent/bulletins" className="text-sm text-zinc-500">
+        <Link href="/parent/bulletins" className="text-sm text-stone-500">
           ‹ Bulletins
         </Link>
         <h1 className="mt-1 text-2xl font-bold capitalize">
           {libelleMois(mois)} — {bulletin.contracts?.children?.prenom}
         </h1>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-stone-500">
           Montant net estimé · Pajemploi fait foi
         </p>
       </div>
 
-      <section className="rounded-2xl border border-zinc-200 p-4">
+      <section className="rounded-2xl border border-stone-200 bg-white p-4">
         <h2 className="font-semibold">Le salaire, expliqué</h2>
-        <p className="mt-1 text-xs text-zinc-500">
+        <p className="mt-1 text-xs text-stone-500">
           Touchez une ligne pour voir la formule, les valeurs et la source
           réglementaire.
         </p>
         {(lignes ?? []).map((ligne) => (
-          <details key={ligne.id} className="border-b border-zinc-100 py-2 last:border-0">
+          <details key={ligne.id} className="border-b border-stone-100 py-2 last:border-0">
             <summary className="flex cursor-pointer items-center justify-between gap-2">
               <span className="text-sm">{ligne.label}</span>
               <span className={`font-medium tabular-nums ${Number(ligne.montant) < 0 ? "text-red-600" : ""}`}>
                 {euros(Number(ligne.montant))}
               </span>
             </summary>
-            <div className="mt-2 rounded-xl bg-zinc-50 p-3 text-xs text-zinc-600">
+            <div className="mt-2 rounded-xl bg-stone-50 p-3 text-xs text-stone-600">
               <p className="font-mono">{ligne.formule}</p>
               <ul className="mt-1">
                 {Object.entries((ligne.inputs ?? {}) as Record<string, unknown>).map(
@@ -106,7 +106,7 @@ export default async function BulletinParentPage({
             </div>
           </details>
         ))}
-        <div className="mt-2 flex items-center justify-between border-t border-zinc-200 pt-3">
+        <div className="mt-2 flex items-center justify-between border-t border-stone-200 pt-3">
           <span className="font-semibold">Total dû</span>
           <span className="text-lg font-bold tabular-nums">
             {euros(Number(bulletin.total_du))}
@@ -117,7 +117,7 @@ export default async function BulletinParentPage({
       {declaration && (
         <section className="rounded-2xl border-2 border-blue-200 bg-blue-50/40 p-4">
           <h2 className="font-semibold">Votre déclaration Pajemploi</h2>
-          <p className="mt-1 text-xs text-zinc-600">
+          <p className="mt-1 text-xs text-stone-600">
             En tant que parent employeur, c&apos;est vous qui déclarez. Copiez
             chaque champ dans le formulaire Pajemploi.
           </p>

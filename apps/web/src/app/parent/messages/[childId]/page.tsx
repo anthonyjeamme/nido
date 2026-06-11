@@ -46,7 +46,7 @@ export default async function FilParentPage({
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-4 p-4">
       <div>
-        <Link href="/parent/messages" className="text-sm text-zinc-500">
+        <Link href="/parent/messages" className="text-sm text-stone-500">
           ‹ Messages
         </Link>
         <h1 className="mt-1 text-2xl font-bold">
@@ -55,7 +55,7 @@ export default async function FilParentPage({
       </div>
 
       {silencieux && plage && (
-        <p className="rounded-xl bg-zinc-100 px-4 py-3 text-sm text-zinc-600">
+        <p className="rounded-xl bg-stone-100 px-4 py-3 text-sm text-stone-600">
           🔕 Votre assistante maternelle consulte ses messages entre{" "}
           {plage.debut} et {plage.fin}. Vous pouvez écrire dès maintenant :
           votre message sera lu à la reprise.
@@ -71,7 +71,7 @@ export default async function FilParentPage({
               className={`max-w-[85%] rounded-2xl p-3 text-sm ${
                 deMoi
                   ? "self-end bg-blue-600 text-white"
-                  : "self-start border border-zinc-200 bg-white"
+                  : "self-start border border-stone-200 bg-white"
               }`}
             >
               <p>{message.contenu}</p>
@@ -95,7 +95,7 @@ export default async function FilParentPage({
               <input type="hidden" name="type" value="absence" />
               <button
                 type="submit"
-                className="rounded-full border border-zinc-300 px-4 py-2 text-sm active:bg-zinc-50"
+                className="rounded-full border border-stone-300 bg-white px-4 py-2 text-sm active:bg-stone-50"
               >
                 🛌 Absent demain
               </button>
@@ -106,7 +106,7 @@ export default async function FilParentPage({
               <input type="hidden" name="minutes" value="15" />
               <button
                 type="submit"
-                className="rounded-full border border-zinc-300 px-4 py-2 text-sm active:bg-zinc-50"
+                className="rounded-full border border-stone-300 bg-white px-4 py-2 text-sm active:bg-stone-50"
               >
                 ⏰ Retard +15 min
               </button>
@@ -117,7 +117,7 @@ export default async function FilParentPage({
               <input type="hidden" name="minutes" value="30" />
               <button
                 type="submit"
-                className="rounded-full border border-zinc-300 px-4 py-2 text-sm active:bg-zinc-50"
+                className="rounded-full border border-stone-300 bg-white px-4 py-2 text-sm active:bg-stone-50"
               >
                 ⏰ Retard +30 min
               </button>
@@ -131,7 +131,7 @@ export default async function FilParentPage({
               name="contenu"
               required
               placeholder="Votre message…"
-              className="h-12 flex-1 rounded-xl border border-zinc-300 px-4 text-base outline-none focus:border-zinc-900"
+              className="h-12 flex-1 rounded-xl border border-stone-300 bg-white px-4 text-base outline-none focus:border-stone-900"
             />
             <button
               type="submit"

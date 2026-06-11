@@ -1,5 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { NavOnglets } from "@/components/nav-onglets";
 import { createClient } from "@/lib/supabase/server";
 import { seDeconnecter } from "../actions";
 
@@ -33,36 +35,32 @@ export default async function AssmatLayout({
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-zinc-200 bg-white/90 px-4 py-3 backdrop-blur">
-        <Link href="/" className="text-xl font-bold tracking-tight">
-          Nido
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-stone-200/70 bg-white/85 px-4 py-3 backdrop-blur">
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/icons/icon.svg"
+            alt=""
+            width={28}
+            height={28}
+            className="rounded-lg"
+          />
+          <span className="text-xl font-bold tracking-tight text-stone-900">
+            Nido
+          </span>
         </Link>
         <form action={seDeconnecter}>
           <button
             type="submit"
-            className="text-sm text-zinc-500 underline-offset-2 active:underline"
+            className="rounded-full px-3 py-1.5 text-sm text-stone-500 active:bg-stone-100"
           >
             Se déconnecter
           </button>
         </form>
       </header>
 
-      <main className="flex-1 pb-20">{children}</main>
+      <main className="flex-1 pb-24">{children}</main>
 
-      <nav className="fixed inset-x-0 bottom-0 z-10 border-t border-zinc-200 bg-white pb-[env(safe-area-inset-bottom)]">
-        <div className="mx-auto flex max-w-lg">
-          {ONGLETS.map((onglet) => (
-            <Link
-              key={onglet.href}
-              href={onglet.href}
-              className="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-xs text-zinc-600 active:bg-zinc-50"
-            >
-              <span className="text-xl leading-none">{onglet.icone}</span>
-              {onglet.label}
-            </Link>
-          ))}
-        </div>
-      </nav>
+      <NavOnglets onglets={ONGLETS} />
     </div>
   );
 }

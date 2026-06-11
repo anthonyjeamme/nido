@@ -5,7 +5,7 @@ import { enregistrerMenu } from "./actions";
 
 const JOURS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi"] as const;
 const champ =
-  "h-10 w-full rounded-lg border border-zinc-300 px-3 text-sm outline-none focus:border-zinc-900";
+  "h-10 w-full rounded-lg border border-stone-300 bg-white px-3 text-sm outline-none focus:border-stone-900";
 
 /** Croisement allergènes (US-7.2) : texte du menu vs allergies des enfants. */
 function alertesAllergenes(
@@ -73,11 +73,11 @@ export default async function MenusPage({
         <div className="flex items-center gap-2 text-sm">
           <Link
             href={`/menus?semaine=${semainePrecedente.toISOString().slice(0, 10)}`}
-            className="rounded-lg border border-zinc-300 px-2.5 py-1"
+            className="rounded-lg border border-stone-300 bg-white px-2.5 py-1"
           >
             ‹
           </Link>
-          <span className="text-zinc-600">
+          <span className="text-stone-600">
             Semaine du{" "}
             {new Date(`${semaine}T12:00:00`).toLocaleDateString("fr-FR", {
               day: "numeric",
@@ -86,7 +86,7 @@ export default async function MenusPage({
           </span>
           <Link
             href={`/menus?semaine=${semaineSuivante.toISOString().slice(0, 10)}`}
-            className="rounded-lg border border-zinc-300 px-2.5 py-1"
+            className="rounded-lg border border-stone-300 bg-white px-2.5 py-1"
           >
             ›
           </Link>
@@ -111,10 +111,10 @@ export default async function MenusPage({
       <form action={enregistrerMenu} className="flex flex-col gap-3">
         <input type="hidden" name="semaine" value={semaine} />
         {JOURS.map((jour) => (
-          <div key={jour} className="rounded-2xl border border-zinc-200 p-3">
+          <div key={jour} className="rounded-2xl border border-stone-200 bg-white p-3">
             <p className="text-sm font-medium capitalize">{jour}</p>
             <div className="mt-2 grid grid-cols-2 gap-2">
-              <label className="flex flex-col gap-1 text-xs text-zinc-500">
+              <label className="flex flex-col gap-1 text-xs text-stone-500">
                 Midi
                 <input
                   name={`${jour}_midi`}
@@ -123,7 +123,7 @@ export default async function MenusPage({
                   className={champ}
                 />
               </label>
-              <label className="flex flex-col gap-1 text-xs text-zinc-500">
+              <label className="flex flex-col gap-1 text-xs text-stone-500">
                 Goûter
                 <input
                   name={`${jour}_gouter`}
@@ -146,7 +146,7 @@ export default async function MenusPage({
         </label>
         <button
           type="submit"
-          className="h-12 rounded-xl bg-zinc-900 font-medium text-white active:scale-[0.98]"
+          className="h-12 rounded-xl bg-stone-900 font-medium text-white active:scale-[0.98]"
         >
           Enregistrer le menu
         </button>

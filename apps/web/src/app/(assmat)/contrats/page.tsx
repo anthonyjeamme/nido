@@ -3,9 +3,9 @@ import { euros } from "@/lib/paie";
 import { createClient } from "@/lib/supabase/server";
 
 const STATUTS: Record<string, { label: string; classe: string }> = {
-  brouillon: { label: "Brouillon", classe: "bg-zinc-100 text-zinc-600" },
+  brouillon: { label: "Brouillon", classe: "bg-stone-100 text-stone-600" },
   actif: { label: "Actif", classe: "bg-emerald-100 text-emerald-800" },
-  termine: { label: "Terminé", classe: "bg-zinc-100 text-zinc-400" },
+  termine: { label: "Terminé", classe: "bg-stone-100 text-stone-400" },
 };
 
 export default async function ContratsPage() {
@@ -24,14 +24,14 @@ export default async function ContratsPage() {
         <h1 className="text-2xl font-bold">Contrats</h1>
         <Link
           href="/contrats/nouveau"
-          className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white active:scale-[0.98]"
+          className="rounded-xl bg-stone-900 px-4 py-2 text-sm font-medium text-white active:scale-[0.98]"
         >
           + Nouveau
         </Link>
       </div>
 
       {!contrats?.length ? (
-        <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 text-sm text-zinc-600">
+        <p className="rounded-2xl border border-stone-200 bg-stone-50 p-6 text-sm text-stone-600">
           Aucun contrat. Créez votre premier contrat avec le simulateur de
           mensualisation : chaque montant est expliqué, formule et source à
           l&apos;appui.
@@ -49,7 +49,7 @@ export default async function ContratsPage() {
               <li key={c.id}>
                 <Link
                   href={`/contrats/${c.id}`}
-                  className="flex flex-col gap-1 rounded-2xl border border-zinc-200 p-4 active:bg-zinc-50"
+                  className="flex flex-col gap-1 rounded-2xl border border-stone-200 bg-white p-4 active:bg-stone-50"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-medium">
@@ -61,7 +61,7 @@ export default async function ContratsPage() {
                       {statut.label}
                     </span>
                   </div>
-                  <p className="text-sm text-zinc-500">
+                  <p className="text-sm text-stone-500">
                     {c.type === "annee_complete"
                       ? "Année complète"
                       : `Année incomplète · ${c.semaines_programmees} sem.`}{" "}

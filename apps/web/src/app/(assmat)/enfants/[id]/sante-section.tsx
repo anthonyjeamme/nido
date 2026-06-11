@@ -7,7 +7,7 @@ import {
 } from "../sante-actions";
 
 const champ =
-  "h-11 rounded-xl border border-zinc-300 px-3 text-base outline-none focus:border-zinc-900";
+  "h-11 rounded-xl border border-stone-300 bg-white px-3 text-base outline-none focus:border-stone-900";
 
 const TYPES_SANTE: Record<string, string> = {
   fievre: "🌡 Fièvre",
@@ -84,10 +84,10 @@ export async function SanteSection({
         ))}
         <form
           action={majStockCouches}
-          className="flex items-end gap-2 rounded-2xl border border-zinc-200 p-4"
+          className="flex items-end gap-2 rounded-2xl border border-stone-200 bg-white p-4"
         >
           <input type="hidden" name="child_id" value={childId} />
-          <label className="flex flex-1 flex-col gap-1 text-xs text-zinc-600">
+          <label className="flex flex-1 flex-col gap-1 text-xs text-stone-600">
             Couches restantes
             <input
               name="quantite" type="number" min="0" required
@@ -95,7 +95,7 @@ export async function SanteSection({
               className={champ}
             />
           </label>
-          <label className="flex flex-1 flex-col gap-1 text-xs text-zinc-600">
+          <label className="flex flex-1 flex-col gap-1 text-xs text-stone-600">
             Seuil d&apos;alerte
             <input
               name="seuil_alerte" type="number" min="1"
@@ -105,12 +105,12 @@ export async function SanteSection({
           </label>
           <button
             type="submit"
-            className="h-11 rounded-xl border border-zinc-300 px-4 text-sm active:bg-zinc-50"
+            className="h-11 rounded-xl border border-stone-300 bg-white px-4 text-sm active:bg-stone-50"
           >
             OK
           </button>
         </form>
-        <p className="text-xs text-zinc-400">
+        <p className="text-xs text-stone-400">
           Chaque change saisi décompte automatiquement une couche.
         </p>
       </section>
@@ -119,7 +119,7 @@ export async function SanteSection({
       <section className="flex flex-col gap-2">
         <h2 className="font-semibold">Traitements en cours</h2>
         {!autorisationMedicament && (
-          <p className="rounded-xl bg-zinc-100 px-4 py-3 text-xs text-zinc-600">
+          <p className="rounded-xl bg-stone-100 px-4 py-3 text-xs text-stone-600">
             L&apos;autorisation parentale « Médicaments » est inactive : aucune
             administration ne pourra être enregistrée (blocage serveur).
           </p>
@@ -127,11 +127,11 @@ export async function SanteSection({
         {(medicaments ?? []).map((medicament) => (
           <div
             key={medicament.id}
-            className="flex items-center justify-between gap-2 rounded-2xl border border-zinc-200 p-4"
+            className="flex items-center justify-between gap-2 rounded-2xl border border-stone-200 bg-white p-4"
           >
             <div>
               <p className="font-medium">{medicament.nom}</p>
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-stone-500">
                 {medicament.posologie} · ordonnance jointe ✓
               </p>
             </div>
@@ -140,7 +140,7 @@ export async function SanteSection({
               <input type="hidden" name="medication_id" value={medicament.id} />
               <button
                 type="submit"
-                className="rounded-xl bg-zinc-900 px-3 py-2 text-xs font-medium text-white active:scale-[0.98] disabled:bg-zinc-300"
+                className="rounded-xl bg-stone-900 px-3 py-2 text-xs font-medium text-white active:scale-[0.98] disabled:bg-stone-300"
                 disabled={!autorisationMedicament}
               >
                 💊 Administrer
@@ -148,8 +148,8 @@ export async function SanteSection({
             </form>
           </div>
         ))}
-        <details className="rounded-2xl border border-dashed border-zinc-300 p-4">
-          <summary className="cursor-pointer text-sm text-zinc-600">
+        <details className="rounded-2xl border border-dashed border-stone-300 p-4">
+          <summary className="cursor-pointer text-sm text-stone-600">
             + Ajouter un traitement (ordonnance obligatoire)
           </summary>
           <form action={ajouterMedicament} className="mt-3 flex flex-col gap-2">
@@ -157,26 +157,26 @@ export async function SanteSection({
             <input name="nom" required placeholder="Nom du médicament" className={champ} />
             <input name="posologie" required placeholder="Posologie (ex. 1 dose si T° > 38,5°)" className={champ} />
             <div className="grid grid-cols-2 gap-2">
-              <label className="flex flex-col gap-1 text-xs text-zinc-600">
+              <label className="flex flex-col gap-1 text-xs text-stone-600">
                 Début
                 <input name="date_debut" type="date" required className={champ} />
               </label>
-              <label className="flex flex-col gap-1 text-xs text-zinc-600">
+              <label className="flex flex-col gap-1 text-xs text-stone-600">
                 Fin (facultatif)
                 <input name="date_fin" type="date" className={champ} />
               </label>
             </div>
-            <label className="flex flex-col gap-1 text-xs text-zinc-600">
+            <label className="flex flex-col gap-1 text-xs text-stone-600">
               Ordonnance (photo ou PDF) — obligatoire
               <input
                 name="ordonnance" type="file" required
                 accept="image/*,.pdf"
-                className="rounded-xl border border-zinc-300 p-2 text-sm"
+                className="rounded-xl border border-stone-300 bg-white p-2 text-sm"
               />
             </label>
             <button
               type="submit"
-              className="h-11 rounded-xl bg-zinc-900 text-sm font-medium text-white active:scale-[0.98]"
+              className="h-11 rounded-xl bg-stone-900 text-sm font-medium text-white active:scale-[0.98]"
             >
               Enregistrer le traitement
             </button>
@@ -188,7 +188,7 @@ export async function SanteSection({
       {(evenements?.length ?? 0) > 0 && (
         <section className="flex flex-col gap-2">
           <h2 className="font-semibold">Derniers événements santé</h2>
-          <ul className="flex flex-col gap-1 rounded-2xl border border-zinc-200 p-4 text-sm">
+          <ul className="flex flex-col gap-1 rounded-2xl border border-stone-200 bg-white p-4 text-sm">
             {evenements!.map((evenement, i) => {
               const payload = evenement.payload as Record<string, unknown>;
               return (
@@ -199,7 +199,7 @@ export async function SanteSection({
                     {evenement.type === "symptome" && ` ${payload.texte ?? ""}`}
                     {evenement.type === "medicament" && ` ${payload.dose ?? ""}`}
                   </span>
-                  <span className="shrink-0 text-xs text-zinc-400">
+                  <span className="shrink-0 text-xs text-stone-400">
                     {new Date(evenement.heure).toLocaleString("fr-FR", {
                       day: "numeric", month: "short", hour: "2-digit", minute: "2-digit",
                     })}
@@ -208,7 +208,7 @@ export async function SanteSection({
               );
             })}
           </ul>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-stone-400">
             Journal infalsifiable : aucune modification ni suppression possible.
           </p>
         </section>

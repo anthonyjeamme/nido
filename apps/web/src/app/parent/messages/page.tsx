@@ -15,7 +15,7 @@ export default async function MessagesParentPage() {
     return (
       <div className="mx-auto flex max-w-lg flex-col gap-4 p-4">
         <h1 className="text-2xl font-bold">Messages</h1>
-        <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 text-sm text-zinc-600">
+        <p className="rounded-2xl border border-stone-200 bg-stone-50 p-6 text-sm text-stone-600">
           Aucun enfant rattaché à votre compte.
         </p>
       </div>
@@ -34,10 +34,10 @@ export default async function MessagesParentPage() {
           <li key={enfant.id}>
             <Link
               href={`/parent/messages/${enfant.id}`}
-              className="flex items-center justify-between rounded-2xl border border-zinc-200 p-4 active:bg-zinc-50"
+              className="flex items-center justify-between rounded-2xl border border-stone-200 bg-white p-4 active:bg-stone-50"
             >
               <span className="font-medium">Au sujet de {enfant.prenom}</span>
-              <span className="text-zinc-300">›</span>
+              <span className="text-stone-300">›</span>
             </Link>
           </li>
         ))}

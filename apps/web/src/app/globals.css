@@ -1,26 +1,42 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   Thème Nido — chaleureux, clair, lisible (utilisatrices non techniques).
+   Thème clair UNIQUE pour l'instant : pas de bascule automatique en sombre
+   (les composants sont conçus pour le clair ; un vrai thème sombre viendra
+   comme un choix assumé, pas un accident du système).
+--------------------------------------------------------------------------- */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --background: #faf7f2; /* crème chaleureux */
+  --surface: #ffffff;
+  --foreground: #292524; /* encre chaude (stone-800) */
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--background);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Les <summary> stylés sans le marqueur par défaut, plus doux au doigt */
+summary {
+  list-style: none;
+}
+summary::-webkit-details-marker {
+  display: none;
 }

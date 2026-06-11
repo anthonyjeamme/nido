@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { envoyerLienMagique } from "./actions";
@@ -27,9 +28,18 @@ export default async function LoginPage({
 
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center gap-8 p-6">
-      <div className="flex flex-col items-center gap-2">
-        <h1 className="text-4xl font-bold tracking-tight">Nido</h1>
-        <p className="text-center text-sm text-zinc-500">
+      <div className="flex flex-col items-center gap-3">
+        <Image
+          src="/icons/icon.svg"
+          alt=""
+          width={72}
+          height={72}
+          className="rounded-3xl shadow-lg shadow-amber-900/10"
+        />
+        <h1 className="text-4xl font-bold tracking-tight text-stone-900">
+          Nido
+        </h1>
+        <p className="text-center text-sm text-stone-500">
           Votre quotidien d&apos;assistante maternelle, simplifié.
         </p>
       </div>
@@ -59,7 +69,7 @@ export default async function LoginPage({
               autoComplete="email"
               inputMode="email"
               placeholder="vous@exemple.fr"
-              className="h-12 rounded-xl border border-zinc-300 px-4 text-base outline-none focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10"
+              className="h-12 rounded-xl border border-stone-300 bg-white px-4 text-base outline-none focus:border-stone-900 focus:ring-2 focus:ring-stone-900/10"
             />
           </label>
 
@@ -71,12 +81,12 @@ export default async function LoginPage({
 
           <button
             type="submit"
-            className="h-12 rounded-xl bg-zinc-900 font-medium text-white transition active:scale-[0.98]"
+            className="h-12 rounded-xl bg-stone-900 font-medium text-white transition active:scale-[0.98]"
           >
             Recevoir mon lien de connexion
           </button>
 
-          <p className="text-center text-xs text-zinc-500">
+          <p className="text-center text-xs text-stone-500">
             Pas de mot de passe : vous recevez un lien sécurisé par e-mail.
           </p>
         </form>

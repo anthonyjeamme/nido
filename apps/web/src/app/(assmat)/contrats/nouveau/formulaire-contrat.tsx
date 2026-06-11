@@ -11,7 +11,7 @@ import { euros } from "@/lib/paie";
 import { creerContrat } from "../actions";
 
 const champ =
-  "h-12 w-full rounded-xl border border-zinc-300 px-4 text-base outline-none focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10";
+  "h-12 w-full rounded-xl border border-stone-300 bg-white px-4 text-base outline-none focus:border-stone-900 focus:ring-2 focus:ring-stone-900/10";
 
 interface Enfant {
   id: string;
@@ -73,13 +73,13 @@ export function FormulaireContrat({
   return (
     <form action={creerContrat} className="flex flex-col gap-5">
       {/* ----- Simulateur en direct ----- */}
-      <div className="sticky top-14 z-10 rounded-2xl border border-zinc-900 bg-zinc-900 p-4 text-white shadow-lg">
-        <p className="text-sm text-zinc-300">Salaire mensualisé estimé (net)</p>
+      <div className="sticky top-14 z-10 rounded-2xl border border-stone-900 bg-stone-900 p-4 text-white shadow-lg">
+        <p className="text-sm text-stone-300">Salaire mensualisé estimé (net)</p>
         <p className="text-3xl font-bold tabular-nums">
           {simulation ? euros(simulation.mensualisation.montant) : "—"}
         </p>
         {simulation && (
-          <p className="mt-1 text-xs text-zinc-400">
+          <p className="mt-1 text-xs text-stone-400">
             {simulation.mensualisation.formule}
           </p>
         )}
@@ -134,7 +134,7 @@ export function FormulaireContrat({
           <label
             key={valeur}
             className={`flex cursor-pointer flex-col gap-0.5 rounded-2xl border p-3 ${
-              type === valeur ? "border-zinc-900 bg-zinc-50" : "border-zinc-200"
+              type === valeur ? "border-stone-900 bg-stone-50" : "border-stone-200"
             }`}
           >
             <input
@@ -146,7 +146,7 @@ export function FormulaireContrat({
               className="sr-only"
             />
             <span className="text-sm font-medium">{label}</span>
-            <span className="text-xs text-zinc-500">{aide}</span>
+            <span className="text-xs text-stone-500">{aide}</span>
           </label>
         ))}
       </div>
@@ -221,7 +221,7 @@ export function FormulaireContrat({
       </div>
 
       {/* ----- Repas ----- */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 p-4">
+      <div className="flex flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-4">
         <label className="flex items-center gap-2 text-sm font-medium">
           <input
             type="checkbox" name="assmat_fournit_repas"
@@ -254,12 +254,12 @@ export function FormulaireContrat({
         </select>
       </label>
 
-      <label className="flex items-center gap-2 rounded-2xl border border-zinc-200 p-4 text-sm">
+      <label className="flex items-center gap-2 rounded-2xl border border-stone-200 bg-white p-4 text-sm">
         <input type="checkbox" name="parent_peut_pointer" className="h-4 w-4" />
         <span>
           <span className="font-medium">Les parents peuvent pointer</span>
           <br />
-          <span className="text-zinc-500">
+          <span className="text-stone-500">
             Arrivées/départs enregistrables par les parents (révocable à tout
             moment)
           </span>
@@ -269,7 +269,7 @@ export function FormulaireContrat({
       <button
         type="submit"
         disabled={bloquants.length > 0}
-        className="h-12 rounded-xl bg-zinc-900 font-medium text-white active:scale-[0.98] disabled:bg-zinc-300"
+        className="h-12 rounded-xl bg-stone-900 font-medium text-white active:scale-[0.98] disabled:bg-stone-300"
       >
         Créer le contrat (brouillon)
       </button>

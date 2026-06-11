@@ -23,14 +23,14 @@ export default async function EnfantsPage() {
         <h1 className="text-2xl font-bold">Enfants</h1>
         <Link
           href="/enfants/nouveau"
-          className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white active:scale-[0.98]"
+          className="rounded-xl bg-stone-900 px-4 py-2 text-sm font-medium text-white active:scale-[0.98]"
         >
           + Ajouter
         </Link>
       </div>
 
       {!enfants?.length ? (
-        <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 text-sm text-zinc-600">
+        <p className="rounded-2xl border border-stone-200 bg-stone-50 p-6 text-sm text-stone-600">
           Aucun enfant pour le moment. Ajoutez les enfants que vous accueillez
           pour créer leurs contrats et suivre leurs journées.
         </p>
@@ -40,7 +40,7 @@ export default async function EnfantsPage() {
             <li key={enfant.id}>
               <Link
                 href={`/enfants/${enfant.id}`}
-                className="flex items-center gap-3 rounded-2xl border border-zinc-200 p-4 active:bg-zinc-50"
+                className="flex items-center gap-3 rounded-2xl border border-stone-200 bg-white p-4 active:bg-stone-50"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-lg">
                   {enfant.prenom[0]}
@@ -49,11 +49,11 @@ export default async function EnfantsPage() {
                   <span className="block font-medium">
                     {enfant.prenom} {enfant.nom}
                   </span>
-                  <span className="text-sm text-zinc-500">
+                  <span className="text-sm text-stone-500">
                     {age(enfant.date_naissance)}
                   </span>
                 </span>
-                <span className="text-zinc-300">›</span>
+                <span className="text-stone-300">›</span>
               </Link>
             </li>
           ))}

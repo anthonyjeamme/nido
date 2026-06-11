@@ -30,7 +30,7 @@ export default async function InvitationPage({
     return (
       <main className="flex min-h-dvh flex-col items-center justify-center gap-4 p-6">
         <h1 className="text-2xl font-bold">Invitation invalide</h1>
-        <p className="max-w-sm text-center text-sm text-zinc-600">
+        <p className="max-w-sm text-center text-sm text-stone-600">
           {error.message.includes("déjà été utilisée")
             ? "Cette invitation a déjà été utilisée par un autre compte. Demandez un nouveau lien à votre assistante maternelle."
             : "Ce lien d'invitation est introuvable ou a expiré. Demandez un nouveau lien à votre assistante maternelle."}

@@ -72,13 +72,13 @@ export default async function BulletinPage({
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-5 p-4">
       <div>
-        <Link href="/paie" className="text-sm text-zinc-500">
+        <Link href="/paie" className="text-sm text-stone-500">
           ‹ Paie
         </Link>
         <h1 className="mt-1 text-2xl font-bold capitalize">
           {libelleMois(mois)} — {contrat?.children?.prenom}
         </h1>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-stone-500">
           Bulletin {bulletin.statut === "valide" ? "validé" : "brouillon"} ·
           moteur v{bulletin.engine_version} · montant net estimé, Pajemploi
           fait foi
@@ -100,17 +100,17 @@ export default async function BulletinPage({
       )}
 
       {/* ----- La fiche expliquée : chaque ligne est dépliable ----- */}
-      <section className="rounded-2xl border border-zinc-200 p-4">
+      <section className="rounded-2xl border border-stone-200 bg-white p-4">
         <h2 className="font-semibold">Salaire</h2>
         {lignesSalaire.map((ligne) => (
-          <details key={ligne.id} className="border-b border-zinc-100 py-2 last:border-0">
+          <details key={ligne.id} className="border-b border-stone-100 py-2 last:border-0">
             <summary className="flex cursor-pointer items-center justify-between gap-2">
               <span className="text-sm">{ligne.label}</span>
               <span className={`font-medium tabular-nums ${Number(ligne.montant) < 0 ? "text-red-600" : ""}`}>
                 {euros(Number(ligne.montant))}
               </span>
             </summary>
-            <div className="mt-2 rounded-xl bg-zinc-50 p-3 text-xs text-zinc-600">
+            <div className="mt-2 rounded-xl bg-stone-50 p-3 text-xs text-stone-600">
               <p className="font-mono">{ligne.formule}</p>
               <ul className="mt-1">
                 {Object.entries((ligne.inputs ?? {}) as Record<string, unknown>).map(
@@ -135,7 +135,7 @@ export default async function BulletinPage({
             </div>
           </details>
         ))}
-        <div className="mt-2 flex items-center justify-between border-t border-zinc-200 pt-3">
+        <div className="mt-2 flex items-center justify-between border-t border-stone-200 pt-3">
           <span className="font-semibold">Net total</span>
           <span className="text-lg font-bold tabular-nums">
             {euros(Number(bulletin.net_total))}
@@ -143,21 +143,21 @@ export default async function BulletinPage({
         </div>
       </section>
 
-      <section className="rounded-2xl border border-zinc-200 p-4">
+      <section className="rounded-2xl border border-stone-200 bg-white p-4">
         <h2 className="font-semibold">Indemnités (en sus du salaire)</h2>
         {lignesIndemnites.map((ligne) => (
-          <details key={ligne.id} className="border-b border-zinc-100 py-2 last:border-0">
+          <details key={ligne.id} className="border-b border-stone-100 py-2 last:border-0">
             <summary className="flex cursor-pointer items-center justify-between gap-2">
               <span className="text-sm">{ligne.label}</span>
               <span className="font-medium tabular-nums">{euros(Number(ligne.montant))}</span>
             </summary>
-            <div className="mt-2 rounded-xl bg-zinc-50 p-3 text-xs text-zinc-600">
+            <div className="mt-2 rounded-xl bg-stone-50 p-3 text-xs text-stone-600">
               <p className="font-mono">{ligne.formule}</p>
               <p className="mt-1 italic">Source : {ligne.ref_source}</p>
             </div>
           </details>
         ))}
-        <div className="mt-2 flex items-center justify-between border-t border-zinc-200 pt-3">
+        <div className="mt-2 flex items-center justify-between border-t border-stone-200 pt-3">
           <span className="font-semibold">Total dû par l&apos;employeur</span>
           <span className="text-lg font-bold tabular-nums">
             {euros(Number(bulletin.total_du))}
@@ -173,7 +173,7 @@ export default async function BulletinPage({
             <input type="hidden" name="mois" value={mois} />
             <button
               type="submit"
-              className="h-12 w-full rounded-xl border border-zinc-300 text-sm font-medium active:bg-zinc-50"
+              className="h-12 w-full rounded-xl border border-stone-300 text-sm font-medium active:bg-stone-50"
             >
               Régénérer
             </button>
@@ -183,7 +183,7 @@ export default async function BulletinPage({
             <input type="hidden" name="retour" value={retour} />
             <button
               type="submit"
-              className="h-12 w-full rounded-xl bg-zinc-900 text-sm font-medium text-white active:scale-[0.98]"
+              className="h-12 w-full rounded-xl bg-stone-900 text-sm font-medium text-white active:scale-[0.98]"
             >
               Valider le bulletin
             </button>
@@ -206,7 +206,7 @@ export default async function BulletinPage({
               {declaration.statut === "declare" ? "Déclaré ✓" : "À déclarer"}
             </span>
           </div>
-          <p className="mt-1 text-xs text-zinc-600">
+          <p className="mt-1 text-xs text-stone-600">
             Une déclaration par enfant. Recopiez chaque champ dans le
             formulaire Pajemploi avec le bouton copier.
           </p>

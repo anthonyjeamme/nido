@@ -86,13 +86,13 @@ export default async function RecapPage({
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-4 p-4">
       <div>
-        <Link href="/" className="text-sm text-zinc-500">
+        <Link href="/" className="text-sm text-stone-500">
           ‹ Ma journée
         </Link>
         <h1 className="mt-1 text-2xl font-bold">
           Récap du soir — {enfant.prenom}
         </h1>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-stone-500">
           {new Date(date).toLocaleDateString("fr-FR", {
             weekday: "long",
             day: "numeric",
@@ -113,17 +113,17 @@ export default async function RecapPage({
       )}
 
       {sections.length === 0 ? (
-        <p className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 text-sm text-zinc-600">
+        <p className="rounded-2xl border border-stone-200 bg-stone-50 p-6 text-sm text-stone-600">
           Aucun événement visible aujourd&apos;hui.
         </p>
       ) : (
         sections.map((section) => (
           <section
             key={section.titre}
-            className="rounded-2xl border border-zinc-200 p-4"
+            className="rounded-2xl border border-stone-200 bg-white p-4"
           >
             <h2 className="text-sm font-semibold">{section.titre}</h2>
-            <ul className="mt-1 text-sm text-zinc-700">
+            <ul className="mt-1 text-sm text-stone-700">
               {section.lignes.map((ligne, i) => (
                 <li key={i}>• {ligne}</li>
               ))}
@@ -143,12 +143,12 @@ export default async function RecapPage({
               rows={3}
               defaultValue={contenu.mot_du_jour}
               placeholder="Très belle journée, beaucoup de sourires…"
-              className="rounded-xl border border-zinc-300 p-3 text-base outline-none focus:border-zinc-900"
+              className="rounded-xl border border-stone-300 bg-white p-3 text-base outline-none focus:border-stone-900"
             />
           </label>
           <button
             type="submit"
-            className="h-12 rounded-xl bg-zinc-900 font-medium text-white active:scale-[0.98]"
+            className="h-12 rounded-xl bg-stone-900 font-medium text-white active:scale-[0.98]"
           >
             Valider et envoyer aux parents
           </button>

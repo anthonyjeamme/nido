@@ -2,9 +2,9 @@ import { declarerFievre } from "./enfants/sante-actions";
 import { enregistrerEvenement } from "./journee-actions";
 
 const bouton =
-  "rounded-xl border border-zinc-300 px-3 py-2 text-sm active:bg-zinc-100";
+  "rounded-xl border border-stone-300 bg-white px-3 py-2 text-sm active:bg-stone-100";
 const champ =
-  "h-10 rounded-lg border border-zinc-300 px-3 text-sm outline-none focus:border-zinc-900";
+  "h-10 rounded-lg border border-stone-300 bg-white px-3 text-sm outline-none focus:border-stone-900";
 
 /**
  * Saisie ultra-rapide des événements du jour (US-4.1) :
@@ -109,7 +109,7 @@ export function SaisieRapide({ childId }: { childId: string }) {
               <option value="humeur">Humeur</option>
               <option value="note">Note</option>
             </select>
-            <label className="flex items-center gap-1.5 text-xs text-zinc-600">
+            <label className="flex items-center gap-1.5 text-xs text-stone-600">
               <input type="checkbox" name="prive" className="h-4 w-4" />
               Privé
             </label>
