@@ -17,6 +17,9 @@ importers:
       '@nido/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@nido/paie-engine':
+        specifier: workspace:*
+        version: link:../../packages/paie-engine
       '@nido/ui':
         specifier: workspace:*
         version: link:../../packages/ui
