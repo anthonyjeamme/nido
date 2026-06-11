@@ -1,0 +1,7 @@
+{
+  "extends": "@nido/config/typescript/base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["src", "tests"]
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#18181b"/>
+  <!-- Nid -->
+  <path d="M128 312c0 62 57 104 128 104s128-42 128-104c0-8-6-14-14-14H142c-8 0-14 6-14 14z" fill="#d4a373"/>
+  <path d="M122 298h268" stroke="#a07850" stroke-width="14" stroke-linecap="round"/>
+  <!-- Oisillon -->
+  <circle cx="256" cy="238" r="58" fill="#fefae0"/>
+  <circle cx="238" cy="228" r="9" fill="#18181b"/>
+  <circle cx="274" cy="228" r="9" fill="#18181b"/>
+  <path d="M248 252l8 10 8-10z" fill="#e9a23b"/>
+</svg>
