@@ -662,6 +662,89 @@ export type Database = {
           },
         ]
       }
+      dishes: {
+        Row: {
+          allergenes: string[]
+          assmat_id: string
+          created_at: string
+          id: string
+          nom: string
+        }
+        Insert: {
+          allergenes?: string[]
+          assmat_id: string
+          created_at?: string
+          id?: string
+          nom: string
+        }
+        Update: {
+          allergenes?: string[]
+          assmat_id?: string
+          created_at?: string
+          id?: string
+          nom?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dishes_assmat_id_fkey"
+            columns: ["assmat_id"]
+            isOneToOne: false
+            referencedRelation: "assmats"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      health_events: {
+        Row: {
+          child_id: string
+          created_at: string
+          declare_par: string
+          heure: string
+          id: string
+          lu_par_parent_le: string | null
+          notifie_parent: boolean
+          payload: Json
+          type: Database["public"]["Enums"]["health_event_type"]
+        }
+        Insert: {
+          child_id: string
+          created_at?: string
+          declare_par: string
+          heure?: string
+          id?: string
+          lu_par_parent_le?: string | null
+          notifie_parent?: boolean
+          payload?: Json
+          type: Database["public"]["Enums"]["health_event_type"]
+        }
+        Update: {
+          child_id?: string
+          created_at?: string
+          declare_par?: string
+          heure?: string
+          id?: string
+          lu_par_parent_le?: string | null
+          notifie_parent?: boolean
+          payload?: Json
+          type?: Database["public"]["Enums"]["health_event_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "health_events_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "health_events_declare_par_fkey"
+            columns: ["declare_par"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leave_balances: {
         Row: {
           contract_id: string
@@ -696,6 +779,91 @@ export type Database = {
             columns: ["contract_id"]
             isOneToOne: false
             referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medications: {
+        Row: {
+          actif: boolean
+          child_id: string
+          created_at: string
+          date_debut: string
+          date_fin: string | null
+          id: string
+          nom: string
+          ordonnance_path: string
+          posologie: string
+          updated_at: string
+        }
+        Insert: {
+          actif?: boolean
+          child_id: string
+          created_at?: string
+          date_debut: string
+          date_fin?: string | null
+          id?: string
+          nom: string
+          ordonnance_path: string
+          posologie: string
+          updated_at?: string
+        }
+        Update: {
+          actif?: boolean
+          child_id?: string
+          created_at?: string
+          date_debut?: string
+          date_fin?: string | null
+          id?: string
+          nom?: string
+          ordonnance_path?: string
+          posologie?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medications_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      menus: {
+        Row: {
+          assmat_id: string
+          created_at: string
+          entrees: Json
+          id: string
+          publie: boolean
+          semaine: string
+          updated_at: string
+        }
+        Insert: {
+          assmat_id: string
+          created_at?: string
+          entrees?: Json
+          id?: string
+          publie?: boolean
+          semaine: string
+          updated_at?: string
+        }
+        Update: {
+          assmat_id?: string
+          created_at?: string
+          entrees?: Json
+          id?: string
+          publie?: boolean
+          semaine?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menus_assmat_id_fkey"
+            columns: ["assmat_id"]
+            isOneToOne: false
+            referencedRelation: "assmats"
             referencedColumns: ["id"]
           },
         ]
@@ -1086,6 +1254,91 @@ export type Database = {
           },
         ]
       }
+      supplies: {
+        Row: {
+          child_id: string
+          created_at: string
+          id: string
+          label: string
+          quantite: number
+          seuil_alerte: number
+          type: Database["public"]["Enums"]["supply_type"]
+          unite: string
+          updated_at: string
+        }
+        Insert: {
+          child_id: string
+          created_at?: string
+          id?: string
+          label: string
+          quantite?: number
+          seuil_alerte?: number
+          type: Database["public"]["Enums"]["supply_type"]
+          unite?: string
+          updated_at?: string
+        }
+        Update: {
+          child_id?: string
+          created_at?: string
+          id?: string
+          label?: string
+          quantite?: number
+          seuil_alerte?: number
+          type?: Database["public"]["Enums"]["supply_type"]
+          unite?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplies_child_id_fkey"
+            columns: ["child_id"]
+            isOneToOne: false
+            referencedRelation: "children"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      supply_movements: {
+        Row: {
+          confirme: boolean
+          created_at: string
+          delta: number
+          id: string
+          note: string | null
+          source: Database["public"]["Enums"]["supply_movement_source"]
+          supply_id: string
+          updated_at: string
+        }
+        Insert: {
+          confirme?: boolean
+          created_at?: string
+          delta: number
+          id?: string
+          note?: string | null
+          source: Database["public"]["Enums"]["supply_movement_source"]
+          supply_id: string
+          updated_at?: string
+        }
+        Update: {
+          confirme?: boolean
+          created_at?: string
+          delta?: number
+          id?: string
+          note?: string | null
+          source?: Database["public"]["Enums"]["supply_movement_source"]
+          supply_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supply_movements_supply_id_fkey"
+            columns: ["supply_id"]
+            isOneToOne: false
+            referencedRelation: "supplies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       threads: {
         Row: {
           assmat_id: string
@@ -1167,6 +1420,7 @@ export type Database = {
       contract_type: "annee_complete" | "annee_incomplete"
       cp_versement_option: "juin" | "prise_principale" | "au_fil"
       declaration_status: "a_declarer" | "declare"
+      health_event_type: "fievre" | "medicament" | "symptome" | "incident"
       log_entry_type:
         | "repas"
         | "sieste"
@@ -1183,6 +1437,14 @@ export type Database = {
         | "horaire_modifie"
         | "ferie"
       summary_status: "genere" | "valide" | "envoye"
+      supply_movement_source: "change_auto" | "reappro_parent" | "ajustement"
+      supply_type:
+        | "couches"
+        | "lait"
+        | "lingettes"
+        | "creme"
+        | "vetements"
+        | "autre"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1330,6 +1592,7 @@ export const Constants = {
       contract_type: ["annee_complete", "annee_incomplete"],
       cp_versement_option: ["juin", "prise_principale", "au_fil"],
       declaration_status: ["a_declarer", "declare"],
+      health_event_type: ["fievre", "medicament", "symptome", "incident"],
       log_entry_type: [
         "repas",
         "sieste",
@@ -1348,6 +1611,15 @@ export const Constants = {
         "ferie",
       ],
       summary_status: ["genere", "valide", "envoye"],
+      supply_movement_source: ["change_auto", "reappro_parent", "ajustement"],
+      supply_type: [
+        "couches",
+        "lait",
+        "lingettes",
+        "creme",
+        "vetements",
+        "autre",
+      ],
     },
   },
 } as const

@@ -1,3 +1,4 @@
+import { declarerFievre } from "./enfants/sante-actions";
 import { enregistrerEvenement } from "./journee-actions";
 
 const bouton =
@@ -69,6 +70,26 @@ export function SaisieRapide({ childId }: { childId: string }) {
             <button type="submit" className={bouton}>Selles</button>
           </form>
         </div>
+      </details>
+
+      {/* Fièvre : événement santé infalsifiable + notification parent */}
+      <details className="w-full">
+        <summary className="cursor-pointer text-sm font-medium">
+          🌡 Fièvre
+        </summary>
+        <form action={declarerFievre} className="mt-2 flex items-center gap-2">
+          <input type="hidden" name="child_id" value={childId} />
+          <input
+            name="temp" type="number" step="0.1" min="35" max="42" required
+            placeholder="38,5" className={`${champ} w-24`}
+          />
+          <select name="action" className={`${champ} flex-1`} defaultValue="surveillance">
+            <option value="surveillance">Surveillance</option>
+            <option value="appel_parent">Parent appelé</option>
+            <option value="antipyretique">Antipyrétique donné (si autorisé)</option>
+          </select>
+          <button type="submit" className={bouton}>OK</button>
+        </form>
       </details>
 
       {/* Activité / note */}

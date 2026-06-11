@@ -347,6 +347,7 @@ const messageAbsence = await postForm(
 verifie("message structuré envoyé", messageAbsence.status === 303);
 
 // --- Retour session assmat : confirmation du message
+const jarParent = new Map(jar);
 jar.clear();
 for (const [k, v] of jarAssmat) jar.set(k, v);
 
@@ -361,6 +362,113 @@ const confirmation = await postForm(
 verifie("confirmation de l'absence", confirmation.status === 303);
 const filApres = await texte(await GET(`${BASE}/messages/${childId}`));
 verifie("message confirmé ✓", filApres.includes("Confirmé"));
+
+// ---------------------------------------------------------------------------
+// 13. Santé, stocks, menus (session assmat — l'enfant est présent, pointé par
+// le parent à l'étape précédente)
+
+// Allergie sur la fiche (pour le croisement allergènes des menus)
+await postForm(`${BASE}/enfants/${childId}`, 'name="allergies"', {
+  child_id: childId,
+  allergies: "arachide",
+});
+
+// Stock de couches initial (au-dessus du seuil)
+await postForm(`${BASE}/enfants/${childId}`, 'name="seuil_alerte"', {
+  child_id: childId,
+  quantite: "9",
+  seuil_alerte: "8",
+});
+
+// Un change décrémente automatiquement (9 → 8, sous le seuil → alertes)
+await postForm(`${BASE}/`, ">Pipi<", { child_id: childId, type: "change" });
+const ficheStock = await texte(await GET(`${BASE}/enfants/${childId}`));
+verifie("change → stock décrémenté (8)", ficheStock.includes('value="8"'));
+verifie("alerte stock côté assmat", ficheStock.includes("Plus que 8 couches"));
+
+// Fièvre depuis Ma journée
+const fievre = await postForm(`${BASE}/`, 'name="temp"', {
+  child_id: childId,
+  temp: "38.7",
+  action: "appel_parent",
+});
+verifie("fièvre déclarée", fievre.status === 200 || fievre.status === 303);
+
+// Traitement avec ordonnance (upload) puis autorisation + administration
+const formMedicament = new FormData();
+const pageFiche = await texte(await GET(`${BASE}/enfants/${childId}`));
+const formMed = (pageFiche.match(/<form[\s\S]*?<\/form>/g) ?? []).find((f) =>
+  f.includes('name="ordonnance"'),
+);
+verifie("formulaire traitement présent", Boolean(formMed));
+formMedicament.set(formMed.match(/\$ACTION_ID_[a-f0-9]+/)[0], "");
+formMedicament.set("child_id", childId);
+formMedicament.set("nom", "Doliprane");
+formMedicament.set("posologie", "1 dose si T° > 38,5");
+formMedicament.set("date_debut", dateJour);
+formMedicament.set(
+  "ordonnance",
+  new File([Buffer.from("%PDF-1.4 ordonnance test")], "ordonnance.pdf", {
+    type: "application/pdf",
+  }),
+);
+const resMedicament = await fetch(`${BASE}/enfants/${childId}`, {
+  method: "POST",
+  headers: { cookie: cookieHeader(), origin: BASE },
+  body: formMedicament,
+  redirect: "manual",
+});
+verifie("traitement créé (ordonnance uploadée)", resMedicament.status === 303);
+
+// Activer l'autorisation « médicaments » puis administrer
+await postForm(`${BASE}/enfants/${childId}`, 'value="medicament"', {});
+const administration = await postForm(
+  `${BASE}/enfants/${childId}`,
+  'name="medication_id"',
+  {},
+);
+verifie("administration enregistrée", administration.status === 303);
+const ficheApres = await texte(await GET(`${BASE}/enfants/${childId}`));
+verifie("journal santé : médicament tracé", ficheApres.includes("💊 Médicament"));
+
+// Menu de la semaine avec allergène → alerte
+const menu = await postForm(`${BASE}/menus`, 'name="lundi_midi"', {
+  lundi_midi: "Cookies à l'arachide",
+  lundi_gouter: "Compote",
+  publier: "on",
+});
+verifie("menu enregistré", menu.status === 303);
+const pageMenus = await texte(await GET(`${BASE}/menus`));
+verifie(
+  "alerte allergène (arachide × Léa)",
+  pageMenus.includes("arachide") && pageMenus.includes("allergique"),
+);
+
+// --- Côté parent : fièvre visible, réappro, menu
+const jarAssmat2 = new Map(jar);
+jar.clear();
+for (const [k, v] of jarParent) jar.set(k, v);
+
+const parentApresSante = await texte(await GET(`${BASE}/parent`));
+verifie("parent : fièvre signalée", parentApresSante.includes("Fièvre signalée"));
+verifie("parent : alerte couches", parentApresSante.includes("ramener des couches"));
+verifie("parent : menu publié visible", parentApresSante.includes("Cookies"));
+
+const reappro = await postForm(`${BASE}/parent`, 'name="supply_id"', {});
+verifie("parent annonce un réappro", reappro.status === 303 || reappro.status === 200);
+
+// --- L'assmat confirme la réception
+jar.clear();
+for (const [k, v] of jarAssmat2) jar.set(k, v);
+
+const confirmationReappro = await postForm(
+  `${BASE}/enfants/${childId}`,
+  'name="mouvement_id"',
+  {},
+);
+verifie("assmat confirme le réappro", confirmationReappro.status === 303);
+const ficheFinale = await texte(await GET(`${BASE}/enfants/${childId}`));
+verifie("stock mis à jour (8 + 20 = 28)", ficheFinale.includes('value="28"'));
 
 console.log(echecs === 0 ? "\n✅ Smoke test OK" : `\n❌ ${echecs} échec(s)`);
 process.exit(echecs === 0 ? 0 : 1);

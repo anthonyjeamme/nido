@@ -23,6 +23,50 @@ export async function pointerParent(formData: FormData) {
   revalidatePath("/parent");
 }
 
+/** Infos du matin (US-5.4) : symptôme signalé avant l'arrivée. */
+export async function signalerSymptome(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const texte = String(formData.get("texte") ?? "").trim();
+  if (!texte) redirect("/parent");
+
+  const { error } = await supabase.from("health_events").insert({
+    child_id: String(formData.get("child_id")),
+    type: "symptome",
+    payload: { texte },
+    declare_par: user.id,
+  });
+  if (error) console.error("signalerSymptome:", error.message);
+
+  revalidatePath("/parent");
+  redirect("/parent");
+}
+
+/** « J'ai réapprovisionné » (US-6.3) : appliqué après confirmation de l'assmat. */
+export async function signalerReappro(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const { error } = await supabase.from("supply_movements").insert({
+    supply_id: String(formData.get("supply_id")),
+    delta: Number(formData.get("delta") || 0),
+    source: "reappro_parent",
+    confirme: false,
+    note: "Annoncé par le parent",
+  });
+  if (error) console.error("signalerReappro:", error.message);
+
+  revalidatePath("/parent");
+  redirect("/parent");
+}
+
 /** Message du parent (libre ou structuré : absence, retard, rdv). */
 export async function envoyerMessageParent(formData: FormData) {
   const supabase = await createClient();

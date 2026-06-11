@@ -72,6 +72,14 @@ export default async function MaJourneePage() {
         </span>
       </div>
 
+      <Link
+        href="/menus"
+        className="flex items-center justify-between rounded-2xl border border-zinc-200 px-4 py-3 text-sm active:bg-zinc-50"
+      >
+        <span>🍽️ Menus de la semaine</span>
+        <span className="text-zinc-300">›</span>
+      </Link>
+
       {presents > capacite && (
         <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
           ⚠ Dépassement de votre capacité d&apos;agrément ({presents} enfants

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { BoutonCopier } from "@/components/bouton-copier";
 import { createClient } from "@/lib/supabase/server";
 import { ajouterTuteur, basculerAutorisation, majSante } from "../actions";
+import { SanteSection } from "./sante-section";
 
 const champ =
   "h-11 rounded-xl border border-zinc-300 px-3 text-base outline-none focus:border-zinc-900";
@@ -141,6 +142,13 @@ export default async function FicheEnfantPage({
           </button>
         </form>
       </section>
+
+      <SanteSection
+        childId={enfant.id}
+        autorisationMedicament={
+          autorisations?.some((a) => a.type === "medicament" && a.actif) ?? false
+        }
+      />
 
       {/* Autorisations */}
       <section className="flex flex-col gap-2">
