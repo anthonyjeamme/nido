@@ -1,0 +1,28 @@
+# Dépendances
+node_modules/
+.pnp/
+
+# Builds
+.next/
+out/
+dist/
+build/
+.turbo/
+
+# Secrets — ne jamais commiter
+.env
+.env.local
+.env.*.local
+
+# Supabase local
+supabase/.temp/
+supabase/.branches/
+
+# Tests & couverture
+coverage/
+
+# Divers
+.DS_Store
+*.log
+*.tsbuildinfo
+.vercel/
