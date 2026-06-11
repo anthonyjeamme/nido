@@ -1,0 +1,230 @@
+{
+  "description": "Cas dorés du moteur de paie. Chaque cas est vérifiable à la main et sourcé. Les barèmes sont ceux du seed 2026 (migration 20260611180000).",
+  "baremes": [
+    { "code": "MINIMUM_GARANTI", "valeur": 4.25, "dateEffet": "2026-01-01" },
+    { "code": "MINIMUM_GARANTI", "valeur": 4.35, "dateEffet": "2026-06-01" },
+    { "code": "SEUIL_HEURES_MAJOREES_SEMAINE", "valeur": 45, "dateEffet": "2022-01-01" },
+    { "code": "MAJORATION_HEURES_PLANCHER_PCT", "valeur": 10, "dateEffet": "2022-01-01" },
+    { "code": "ASSMAT_MIN_CONV_NET_HORAIRE", "valeur": 2.86, "dateEffet": "2025-04-01" },
+    { "code": "ASSMAT_MIN_CONV_NET_HORAIRE", "valeur": 3.28, "dateEffet": "2026-06-01" },
+    { "code": "INDEMNITE_ENTRETIEN_MIN_9H", "valeur": 3.83, "dateEffet": "2026-01-01" },
+    { "code": "INDEMNITE_ENTRETIEN_MIN_9H", "valeur": 3.92, "dateEffet": "2026-06-01" },
+    { "code": "INDEMNITE_ENTRETIEN_PLANCHER_JOUR", "valeur": 2.65, "dateEffet": "2022-01-01" }
+  ],
+  "cas": [
+    {
+      "nom": "Exemple officiel Pajemploi — arrondi des heures normales (32 h × 52 ÷ 12 = 138,66 → 139)",
+      "source": "Bulle d'aide du formulaire Pajemploi (déclaration par enfant, 2026)",
+      "contrat": {
+        "type": "annee_complete",
+        "tauxHoraire": 3.5,
+        "heuresParSemaine": 32,
+        "semainesProgrammees": 52,
+        "joursAccueilParSemaine": 4,
+        "tauxMajorationPct": 10,
+        "indemniteEntretienJour": 3.92,
+        "indemniteRepas": null,
+        "optionVersementCp": "juin",
+        "dateDebut": "2026-01-05"
+      },
+      "evenements": {
+        "mois": "2026-09",
+        "semaines": [
+          { "lundi": "2026-08-31", "heuresReelles": 32 },
+          { "lundi": "2026-09-07", "heuresReelles": 32 },
+          { "lundi": "2026-09-14", "heuresReelles": 32 },
+          { "lundi": "2026-09-21", "heuresReelles": 32 },
+          { "lundi": "2026-09-28", "heuresReelles": 32 }
+        ],
+        "joursPresenceReelle": 22,
+        "repasFournis": 0,
+        "absences": [],
+        "joursCpPris": 0
+      },
+      "attendu": {
+        "netTotal": 485.33,
+        "champsPajemploi": {
+          "heuresNormales": 139,
+          "joursActivite": 18,
+          "joursCongesPayes": 0,
+          "heuresComplementaires": 0,
+          "heuresMajorees": 0,
+          "salaireNetTotal": 485.33,
+          "indemnitesEntretien": 86.24
+        }
+      },
+      "verification": "Mensualisation : 3,50 × 32 × 52 ÷ 12 = 485,333 → 485,33 €. Heures : 138,67 → 139 (exemple Pajemploi). Jours : 4 × 52 ÷ 12 = 17,33 → arrondi supérieur 18. Entretien : 22 × 3,92 = 86,24 €."
+    },
+    {
+      "nom": "Année incomplète 44 semaines — mois sans événement",
+      "source": "Formule art. 109.2 CCN 3239",
+      "contrat": {
+        "type": "annee_incomplete",
+        "tauxHoraire": 4.0,
+        "heuresParSemaine": 36,
+        "semainesProgrammees": 44,
+        "joursAccueilParSemaine": 4,
+        "tauxMajorationPct": 15,
+        "indemniteEntretienJour": 4.5,
+        "indemniteRepas": 4.0,
+        "optionVersementCp": "juin",
+        "dateDebut": "2025-09-01"
+      },
+      "evenements": {
+        "mois": "2026-03",
+        "semaines": [
+          { "lundi": "2026-03-02", "heuresReelles": 36 },
+          { "lundi": "2026-03-09", "heuresReelles": 36 },
+          { "lundi": "2026-03-16", "heuresReelles": 36 },
+          { "lundi": "2026-03-23", "heuresReelles": 36 }
+        ],
+        "joursPresenceReelle": 17,
+        "repasFournis": 17,
+        "absences": [],
+        "joursCpPris": 0
+      },
+      "attendu": {
+        "netTotal": 528,
+        "champsPajemploi": {
+          "heuresNormales": 132,
+          "joursActivite": 15,
+          "joursCongesPayes": 0,
+          "heuresComplementaires": 0,
+          "heuresMajorees": 0,
+          "salaireNetTotal": 528,
+          "indemnitesEntretien": 76.5
+        }
+      },
+      "verification": "Mensualisation : 4,00 × 36 × 44 ÷ 12 = 528,00 €. Heures : 132 pile. Jours : 4 × 44 ÷ 12 = 14,67 → 15. Entretien : 17 × 4,50 = 76,50 €. Repas : 17 × 4,00 = 68,00 € (indemnités totales 144,50 €)."
+    },
+    {
+      "nom": "Dépassements — heures complémentaires et majorées au plancher CCN (10 %)",
+      "source": "CCN 3239 art. 110.1 et 110.2",
+      "contrat": {
+        "type": "annee_complete",
+        "tauxHoraire": 4.0,
+        "heuresParSemaine": 42,
+        "semainesProgrammees": 52,
+        "joursAccueilParSemaine": 5,
+        "tauxMajorationPct": 10,
+        "indemniteEntretienJour": 4.6,
+        "indemniteRepas": null,
+        "optionVersementCp": "juin",
+        "dateDebut": "2026-01-05"
+      },
+      "evenements": {
+        "mois": "2026-06",
+        "semaines": [
+          { "lundi": "2026-06-01", "heuresReelles": 47 },
+          { "lundi": "2026-06-08", "heuresReelles": 42 },
+          { "lundi": "2026-06-15", "heuresReelles": 44 },
+          { "lundi": "2026-06-22", "heuresReelles": 42 }
+        ],
+        "joursPresenceReelle": 22,
+        "repasFournis": 0,
+        "absences": [],
+        "joursCpPris": 0
+      },
+      "attendu": {
+        "netTotal": 756.8,
+        "champsPajemploi": {
+          "heuresNormales": 182,
+          "joursActivite": 22,
+          "joursCongesPayes": 0,
+          "heuresComplementaires": 5,
+          "heuresMajorees": 2,
+          "salaireNetTotal": 756.8,
+          "indemnitesEntretien": 101.2
+        }
+      },
+      "verification": "Mensualisation : 4,00 × 42 × 52 ÷ 12 = 728,00 €. Semaine 1 : 47 h = 3 comp (42→45) + 2 majo (45→47). Semaine 3 : 44 h = 2 comp. Total : 5 comp × 4,00 = 20,00 € ; 2 majo × 4,40 = 8,80 €. Net : 728 + 20 + 8,80 = 756,80 €."
+    },
+    {
+      "nom": "Maladie de l'enfant avec certificat — retenue dans la limite CCN (5 jours/an)",
+      "source": "CCN 3239 art. 105",
+      "contrat": {
+        "type": "annee_incomplete",
+        "tauxHoraire": 3.8,
+        "heuresParSemaine": 40,
+        "semainesProgrammees": 45,
+        "joursAccueilParSemaine": 5,
+        "tauxMajorationPct": 10,
+        "indemniteEntretienJour": 4.0,
+        "indemniteRepas": null,
+        "optionVersementCp": "au_fil",
+        "dateDebut": "2025-09-01"
+      },
+      "evenements": {
+        "mois": "2026-02",
+        "semaines": [
+          { "lundi": "2026-02-02", "heuresReelles": 40 },
+          { "lundi": "2026-02-09", "heuresReelles": 24 },
+          { "lundi": "2026-02-16", "heuresReelles": 40 },
+          { "lundi": "2026-02-23", "heuresReelles": 40 }
+        ],
+        "joursPresenceReelle": 18,
+        "repasFournis": 0,
+        "absences": [
+          { "type": "enfant_maladie_certificat", "heures": 16, "jours": 2 }
+        ],
+        "joursCpPris": 0
+      },
+      "attendu": {
+        "netTotal": 509.2,
+        "champsPajemploi": {
+          "heuresNormales": 134,
+          "joursActivite": 17,
+          "joursCongesPayes": 0,
+          "heuresComplementaires": 0,
+          "heuresMajorees": 0,
+          "salaireNetTotal": 509.2,
+          "indemnitesEntretien": 72
+        }
+      },
+      "verification": "Mensualisation : 3,80 × 40 × 45 ÷ 12 = 570,00 €. Retenue : 16 h × 3,80 = 60,80 €. Net : 509,20 €. Heures : 150 − 16 = 134. Jours : 5 × 45 ÷ 12 = 18,75 → 19, − 2 = 17. Entretien : 18 × 4,00 = 72,00 €."
+    },
+    {
+      "nom": "Année incomplète — CP versés au fil de la prise (juin 2026)",
+      "source": "CCN 3239 art. 102.1.2.2 et 48.1.1.5",
+      "contrat": {
+        "type": "annee_incomplete",
+        "tauxHoraire": 4.0,
+        "heuresParSemaine": 30,
+        "semainesProgrammees": 40,
+        "joursAccueilParSemaine": 5,
+        "tauxMajorationPct": 10,
+        "indemniteEntretienJour": 4.0,
+        "indemniteRepas": null,
+        "optionVersementCp": "au_fil",
+        "dateDebut": "2025-06-01"
+      },
+      "evenements": {
+        "mois": "2026-06",
+        "semaines": [
+          { "lundi": "2026-06-01", "heuresReelles": 30 },
+          { "lundi": "2026-06-08", "heuresReelles": 30 },
+          { "lundi": "2026-06-15", "heuresReelles": 0 },
+          { "lundi": "2026-06-22", "heuresReelles": 30 }
+        ],
+        "joursPresenceReelle": 15,
+        "repasFournis": 0,
+        "absences": [],
+        "joursCpPris": 6,
+        "cpAVerser": { "montant": 150, "jours": 6 }
+      },
+      "attendu": {
+        "netTotal": 550,
+        "champsPajemploi": {
+          "heuresNormales": 138,
+          "joursActivite": 17,
+          "joursCongesPayes": 6,
+          "heuresComplementaires": 0,
+          "heuresMajorees": 0,
+          "salaireNetTotal": 550,
+          "indemnitesEntretien": 60
+        }
+      },
+      "verification": "Mensualisation : 4,00 × 30 × 40 ÷ 12 = 400,00 €. CP versés : 150,00 €. Net : 550,00 €. Heures : 100 + (150 ÷ 4 = 37,5) = 137,5 → 138. Jours : 5 × 40 ÷ 12 = 16,67 → 17. Entretien : 15 × 4,00 = 60,00 €."
+    }
+  ]
+}
